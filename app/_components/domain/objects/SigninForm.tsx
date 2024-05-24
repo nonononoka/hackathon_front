@@ -5,9 +5,12 @@ import { AuthForm } from '../elements/AuthForm'
 
 export const SignInForm = () => {
   return (
-    <AuthForm
-      buttonMessage="Sign in"
-      operationWithEmailAndPassword={signInWithEmailAndPassword}
-    />
+    <>
+      <AuthForm
+        buttonMessage="Sign in"
+        operationWithEmailAndPassword={signInWithEmailAndPassword}
+      />
+      <p>sign in</p>
+    </>
   )
 }

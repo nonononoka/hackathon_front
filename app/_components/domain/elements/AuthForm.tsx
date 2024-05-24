@@ -16,12 +16,10 @@ type AuthFormProps = {
 }
 
 export const AuthForm = (props: AuthFormProps) => {
-  /* ↓state変数を定義 */
   const { operationWithEmailAndPassword, buttonMessage } = props
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  /* ↓関数「handleSubmit」を定義 */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {

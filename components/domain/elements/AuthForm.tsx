@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { AuthButton } from '../../gui/AuthButton'
 import { Input } from '../../gui/Input'
 import { fireAuth } from '@/infrastructure/auth/firebase'
+import { useRouter } from 'next/navigation'
 
 type AuthFormProps = {
   buttonMessage: string
@@ -16,6 +17,7 @@ type AuthFormProps = {
 }
 
 export const AuthForm = (props: AuthFormProps) => {
+  const router = useRouter()
   const { operationWithEmailAndPassword, buttonMessage } = props
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -26,6 +28,7 @@ export const AuthForm = (props: AuthFormProps) => {
       await operationWithEmailAndPassword(fireAuth, email, password)
       setEmail('')
       setPassword('')
+      router.push("/")
     } catch (error) {
       alert(error)
     }

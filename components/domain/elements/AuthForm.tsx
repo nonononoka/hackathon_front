@@ -28,7 +28,7 @@ export const AuthForm = (props: AuthFormProps) => {
       await operationWithEmailAndPassword(fireAuth, email, password)
       setEmail('')
       setPassword('')
-      router.push("/")
+      router.push("/home")
     } catch (error) {
       alert(error)
     }

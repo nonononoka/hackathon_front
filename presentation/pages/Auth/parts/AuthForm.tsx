@@ -3,8 +3,8 @@ import Stack from '@mui/material/Stack'
 import { Auth, UserCredential } from 'firebase/auth'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { AuthButton } from '../../gui/AuthButton'
-import { Input } from '../../gui/Input'
+import { AuthButton } from '../../../../components/gui/AuthButton'
+import { Input } from '../../../../components/gui/Input'
 import { fireAuth } from '@/infrastructure/auth/firebase'
 
 type AuthFormProps = {

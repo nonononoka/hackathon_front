@@ -12,10 +12,6 @@ export const Input = (props: InputProps) => {
     <>
       <p>{property}</p>
       <TextField
-        // label="email"
-        // name="email"
-        // type="email"
-        // autoComplete="email"
         value={value}
         onChange={(e) => setValue(e.target.value)}
         sx={{ width: '300px' }}

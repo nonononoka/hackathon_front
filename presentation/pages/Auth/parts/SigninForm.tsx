@@ -1,7 +1,8 @@
 'use client'
 
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import { AuthForm } from '../elements/AuthForm'
+import { AuthForm } from './AuthForm'
+import Link from 'next/link'
 
 export const SignInForm = () => {
   return (
@@ -11,6 +12,7 @@ export const SignInForm = () => {
         operationWithEmailAndPassword={signInWithEmailAndPassword}
       />
       <p>sign in</p>
+      <Link href="signup">signup</Link>
     </>
   )
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { AuthForm } from '../elements/AuthForm'
+import { AuthForm } from './AuthForm'
 
 export const SignUpForm = () => {
   return (

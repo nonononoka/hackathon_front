@@ -1,11 +1,11 @@
 'use client'
 import Stack from '@mui/material/Stack'
 import { Auth, UserCredential } from 'firebase/auth'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { AuthButton } from '../../gui/AuthButton'
 import { Input } from '../../gui/Input'
 import { fireAuth } from '@/infrastructure/auth/firebase'
-import { useRouter } from 'next/navigation'
 
 type AuthFormProps = {
   buttonMessage: string
@@ -28,7 +28,7 @@ export const AuthForm = (props: AuthFormProps) => {
       await operationWithEmailAndPassword(fireAuth, email, password)
       setEmail('')
       setPassword('')
-      router.push("/home")
+      router.push('/home')
     } catch (error) {
       alert(error)
     }

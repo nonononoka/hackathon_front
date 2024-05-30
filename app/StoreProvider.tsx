@@ -2,12 +2,12 @@
 
 'use client'
 import { useRef } from 'react'
+import type { ReactNode } from 'react'
 import { Provider } from 'react-redux'
-import type { ReactNode } from "react";
 import { makeStore, AppStore } from '@/infrastructure/redux/store'
 
 interface Props {
-  readonly children: ReactNode;
+  readonly children: ReactNode
 }
 
 export default function StoreProvider({ children }: Props) {

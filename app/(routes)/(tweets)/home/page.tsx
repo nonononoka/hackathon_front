@@ -2,8 +2,8 @@
 
 import { NextPage } from 'next'
 
-import { Home } from '@/presentation/pages/Home'
 import { fireAuth } from '@/infrastructure/auth/firebase'
+import { Home } from '@/presentation/pages/Home'
 
 const Page: NextPage = () => {
   return (

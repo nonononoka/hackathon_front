@@ -11,6 +11,7 @@ export const useAuth = () => {
     const unsubscribe = onAuthStateChanged(fireAuth, async (user) => {
       if (user) {
         setUser(user);
+        console.log(await user.getIdToken(true))
       } else {
         setUser(null);
       }

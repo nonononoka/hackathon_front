@@ -4,7 +4,7 @@
 import { useRef } from 'react'
 import type { ReactNode } from 'react'
 import { Provider } from 'react-redux'
-import { makeStore, AppStore } from '@/infrastructure/redux/store'
+import { makeStore, AppStore } from '@/lib/redux/store'
 
 interface Props {
   readonly children: ReactNode

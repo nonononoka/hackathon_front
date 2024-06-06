@@ -1,10 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { counterSlice } from './features/counter/counterSlice';
+import { configureStore } from '@reduxjs/toolkit'
+import { counterSlice } from './features/counter/counterSlice'
 
 // create a instance per-request while retaining the strong type safely.
 export const makeStore = () => {
   return configureStore({
-    reducer: counterSlice.reducer
+    reducer: counterSlice.reducer,
   })
 }
 

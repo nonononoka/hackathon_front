@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { FC, ReactNode } from 'react'
 
-import { useAuth } from '@/useCase/useAuth'
+import { useAuth } from '@/useCase/query/useAuth'
 
 const AuthRouteGuardComponent: FC<{
   children: ReactNode

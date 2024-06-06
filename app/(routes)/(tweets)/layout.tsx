@@ -1,7 +1,7 @@
 'use client'
 
-import AuthRouteGuard from '@/presentation/routing/AuthRouteGuardComponent'
-
+import MeRouteGuard from '@/presentation/routing/MeRouteGuard'
+// import AuthRouteGuard from '@/presentation/routing/AuthRouteGuard'
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <AuthRouteGuard>{children}</AuthRouteGuard>
+  return <MeRouteGuard>{children}</MeRouteGuard>
 }

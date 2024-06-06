@@ -2,7 +2,7 @@
 
 import { NextPage } from 'next'
 
-import { fireAuth } from '@/infrastructure/auth/firebase'
+import { fireAuth } from '@/lib/auth/firebase'
 import { Home } from '@/presentation/pages/Home'
 
 const Page: NextPage = () => {

@@ -1,10 +1,7 @@
 'use client'
 
-import {
-  decrement,
-  increment,
-} from '@/infrastructure/redux/features/counter/counterSlice'
-import { useAppSelector, useAppDispatch } from '@/infrastructure/redux/hooks'
+import { decrement, increment } from '@/lib/redux/features/counter/counterSlice'
+import { useAppSelector, useAppDispatch } from '@/lib/redux/hooks'
 export default function Counter() {
   const dispatch = useAppDispatch()
   const count = useAppSelector((state) => state.value)

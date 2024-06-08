@@ -29,7 +29,7 @@ const MeRouteGuardComponent: FC<{
         if (!getMeData && getMeError) {
             if (getMeError.message == "User not found") {
                 createMe()
-                    .then(() => setMe(createMeData))
+                    .then((data) => setMe(data))
                     .catch(() => {
                         alert("errorが発生しました")
                         createMeReset()

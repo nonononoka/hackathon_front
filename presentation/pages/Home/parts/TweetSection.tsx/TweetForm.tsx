@@ -1,10 +1,10 @@
 import { SubmitHandler, UseFormRegister, UseFormHandleSubmit } from "react-hook-form";
-import { TweetFormType } from ".";
+import { FormType } from ".";
 
 type TweetFormProps = {
-  onSubmit: SubmitHandler<TweetFormType>
-  register: UseFormRegister<TweetFormType>
-  handleSubmit: UseFormHandleSubmit<TweetFormType, undefined>
+  onSubmit: SubmitHandler<FormType>
+  register: UseFormRegister<FormType>
+  handleSubmit: UseFormHandleSubmit<FormType, undefined>
 }
 
 export const TweetForm = (props: TweetFormProps) => {
@@ -13,6 +13,7 @@ export const TweetForm = (props: TweetFormProps) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <input {...register("tweet", { required: "tweetを入力して" })} />
+      <input {...register("tags", { required: "tagを入力して" })} />
       <button type="submit">
         POST
       </button>

@@ -6,17 +6,20 @@ import { useCreateTweet } from "@/useCase/command/createTweet";
 import { TweetResponse } from "@/types/apiTweet";
 import { useTweet } from "@/useCase/query/useTweet";
 
-export type TweetFormType = {
+export type FormType = {
     tweet: string;
+    tags?: string[];
 }
 
 export const TweetSection = () => {
     const [postedTweets, setPostedTweets] = useState<TweetResponse[]>([])
-    const { register, handleSubmit, reset } = useForm<TweetFormType>()
+    const { register, handleSubmit, reset } = useForm<FormType>()
     const { getTweetResult, getTweet, getTweetError, getTweetReset } = useTweet()
     const { createTweetTrigger, createTweetError, createTweetReset } = useCreateTweet()
-    const onSubmit: SubmitHandler<TweetFormType> = (data) => {
-        createTweetTrigger({ data: { text: data.tweet } })
+
+    const onSubmit: SubmitHandler<FormType> = (data) => {
+        console.log(data.tags)
+        createTweetTrigger({ data: { body: data.tweet, tags: data.tags ? [...data.tags] : [] } })
             .then((tweet) => setPostedTweets([...postedTweets, tweet]))
             .then(() => {
                 reset()
@@ -45,7 +48,7 @@ export const TweetSection = () => {
 
     return (
         <>
-            <TweetForm onSubmit={onSubmit} register={register} handleSubmit={handleSubmit}/>
+            <TweetForm onSubmit={onSubmit} register={register} handleSubmit={handleSubmit} />
             <TweetList tweets={postedTweets} />
         </>
     )

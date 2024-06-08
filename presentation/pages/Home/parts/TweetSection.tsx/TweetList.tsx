@@ -8,7 +8,7 @@ export const TweetList = (props: Tweets) => {
 
   return (
     <>
-      {tweets.map((tweet) => <p key={tweet.id}>{tweet.body}</p>)}
+      {tweets.map((tweet) => <p key={tweet.id}>{tweet.body}, {tweet.postedAt}, {tweet.postedBy}, {tweet.likeCount} , {tweet.tags}</p>)}
     </>
   )
 }

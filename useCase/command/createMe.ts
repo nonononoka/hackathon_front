@@ -6,11 +6,11 @@ import { ErrorResponse } from "@/types/apiError";
 
 export const useCreateMe = () => {
     const {
-        data: postMeResult,
-        error: postMeError,
-        isMutating: postMeIsMutating,
-        trigger: postMeTrigger,
-        reset: postMeReset,
+        data: createMeData,
+        error: createMeError,
+        isMutating: createMeLoading,
+        trigger: createMe,
+        reset: createMeReset,
     } = usePOSTMutation<MeResponse, ErrorResponse>("/me");
-    return { postMeResult, postMeError, postMeIsMutating, postMeTrigger, postMeReset }
+    return { createMeData, createMeError, createMeLoading, createMe, createMeReset }
 }

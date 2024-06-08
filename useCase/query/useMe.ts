@@ -5,10 +5,11 @@ import { MeResponse } from "@/types/apiMe";
 
 export const useMe = () => {
     const {
-        data, 
-        error,
-        isMutating:isLoading,
+        data: getMeData, 
+        error: getMeError,
+        isMutating:getMeLoading,
         trigger: getMe,
+        reset: getMeReset
     } = useGETMutation<MeResponse>("/me");
-    return { data, error, isLoading, getMe}
+    return { getMeData, getMeError, getMeLoading, getMe, getMeReset}
 }

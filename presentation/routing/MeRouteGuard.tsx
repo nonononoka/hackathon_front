@@ -11,41 +11,38 @@ const MeRouteGuardComponent: FC<{
     children: ReactNode;
 }> = (props) => {
     const { children } = props;
+    const { getMe, getMeData, getMeError, getMeLoading, getMeReset } = useMe();
+    const { createMeData, createMeLoading, createMe, createMeError, createMeReset } = useCreateMe();
+    const [me, setMe] = useState(getMeData);
 
-    const { getMe, data, error, isLoading } = useMe();
-    if (!isLoading && !error && !data) {
+    useEffect(() => {
         getMe()
-    }
-    const { postMeResult: createMeResult, postMeIsMutating: createMeLoading, postMeTrigger: createMe, postMeError: createMeError } = useCreateMe();
-    const [me, setMe] = useState(data);
+    }, [])
 
     useEffect(() => {
-        if (!me && data) {
-            setMe(data);
+        if (getMeData && !getMeError) {
+            setMe(getMeData)
         }
-    }, [data, me]);
+    }, [getMeData, getMeError])
 
     useEffect(() => {
-        if (!me && createMeResult) {
-            setMe(createMeResult)
-        }
-    })
-
-    useEffect(() => {
-        if (!isLoading && error && !data && !createMeResult && !createMeLoading && !createMeError) {
-            if (error.message == 'User not found') { 
+        if (!getMeData && getMeError) {
+            if (getMeError.message == "User not found") {
                 createMe()
-            } else {
+                    .then(() => setMe(createMeData))
+                    .catch(() => {
+                        alert("errorが発生しました")
+                        createMeReset()
+                        redirect('signin')
+                    })
+            }
+            else {
+                alert("errorが発生しました")
+                getMeReset()
                 redirect('signin')
             }
         }
-    }, [
-        createMe,
-        createMeLoading,
-        data,
-        error,
-        isLoading,
-    ]);
+    }, [getMeData, getMeError])
 
     if (!me) {
         return <p>Loading...</p>;

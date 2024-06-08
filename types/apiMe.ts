@@ -8,14 +8,6 @@ export type MeResponse = {
 } | 'error' | 'alreadyExists';
 
 /**
- * /me のPOSTリクエスト
- */
-export type MePostRequest = {
-  user_name: string;
-  email: string;
-};
-
-/**
  * /me のPUTリクエスト
  */
 export type MePutRequest = {

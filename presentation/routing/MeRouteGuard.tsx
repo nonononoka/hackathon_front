@@ -2,7 +2,7 @@
 
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { redirect } from 'next/navigation'
-import { useCreateMe } from '@/useCase/command/useCreateMe';
+import { useCreateMe } from '@/useCase/command/createMe';
 import { useMe } from '@/useCase/query/useMe';
 
 import AuthRouteGuard from './AuthRouteGuard';

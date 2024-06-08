@@ -1,3 +1,8 @@
+import { TweetSection } from "./parts/TweetSection.tsx"
+
 export const Home = () => {
-  return <p>home</p>
+
+  return (
+    <TweetSection />
+  )
 }

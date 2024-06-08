@@ -17,9 +17,9 @@ export const TweetSection = () => {
     const { createTweetTrigger, createTweetError, createTweetReset } = useCreateTweet()
     const onSubmit: SubmitHandler<TweetFormType> = (data) => {
         createTweetTrigger({ data: { text: data.tweet } })
-            .then(() => reset())
+            .then((tweet) => setPostedTweets([...postedTweets, tweet]))
             .then(() => {
-                getTweet()
+                reset()
             })
     }
 

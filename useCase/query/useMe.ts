@@ -1,15 +1,9 @@
 import {
-    useGETMutation,
+    useGET,
 } from "@/lib/swr/useSWR";
 import { MeResponse } from "@/types/apiMe";
 
-export const useMe = () => {
-    const {
-        data: getMeData, 
-        error: getMeError,
-        isMutating:getMeLoading,
-        trigger: getMe,
-        reset: getMeReset
-    } = useGETMutation<MeResponse>("/me");
-    return { getMeData, getMeError, getMeLoading, getMe, getMeReset}
+export const useMe = (token: string | undefined) => {
+    const { data, error, isLoading, mutate} = useGET<MeResponse>("/me", token);
+    return { data, error, isLoading, mutate}
 }

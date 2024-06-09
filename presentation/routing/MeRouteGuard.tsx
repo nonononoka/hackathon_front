@@ -1,50 +1,41 @@
 'use client';
 
-import { FC, ReactNode, useEffect, useState } from 'react';
+import { FC, ReactNode, useEffect } from 'react';
 import { redirect } from 'next/navigation'
 import { useCreateMe } from '@/useCase/command/createMe';
 import { useMe } from '@/useCase/query/useMe';
-
 import AuthRouteGuard from './AuthRouteGuard';
+import { useAuthToken } from '@/useCase/query/useAuthToken';
+import { useSWRConfig } from 'swr';
 
 const MeRouteGuardComponent: FC<{
     children: ReactNode;
 }> = (props) => {
     const { children } = props;
-    const { getMe, getMeData, getMeError, getMeLoading, getMeReset } = useMe();
-    const { createMeData, createMeLoading, createMe, createMeError, createMeReset } = useCreateMe();
-    const [me, setMe] = useState(getMeData);
-
+    const { data: token } = useAuthToken()
+    const { data, isLoading, error, mutate } = useMe(token);
+    const { createMe, createMeReset, createMeLoading } = useCreateMe();
+    const { cache } = useSWRConfig()
+    console.log(cache)
     useEffect(() => {
-        getMe()
-    }, [])
-
-    useEffect(() => {
-        if (getMeData && !getMeError) {
-            setMe(getMeData)
-        }
-    }, [getMeData, getMeError])
-
-    useEffect(() => {
-        if (!getMeData && getMeError) {
-            if (getMeError.message == "User not found") {
+        if (!isLoading && !data && error && !createMeLoading) {
+            if (error.message == "User not found") {
                 createMe()
-                    .then((data) => setMe(data))
-                    .catch(() => {
-                        alert("errorが発生しました")
+                    .then(() => mutate())
+                    .catch((e) => {
+                        alert(e)
                         createMeReset()
                         redirect('signin')
                     })
             }
             else {
-                alert("errorが発生しました")
-                getMeReset()
+                alert(error)
                 redirect('signin')
             }
         }
-    }, [getMeData, getMeError])
+    }, [data, error, isLoading, createMeLoading])
 
-    if (!me) {
+    if (!data) {
         return <p>Loading...</p>;
     }
 

@@ -1,32 +1,28 @@
 import axios, { AxiosError } from 'axios'
-import { Key } from 'swr'
-// import useSWR from "swr";
+import useSWR, { Key } from 'swr'
 import useSWRMutation from 'swr/mutation'
 import { fireAuth } from '../auth/firebase'
 import { ErrorResponse } from '@/types/apiError'
 
-export const useGETMutation = <Result, Error = ErrorResponse, Params = object>(
+export const useGET = <Result, Error = ErrorResponse>(
   url: string,
+  token: string | undefined,
 ) => {
-  const fetcher = async (
-    url: string,
-    { arg }: { arg: { params?: Params } | undefined },
-  ) => {
-    const idToken = await fireAuth.currentUser?.getIdToken()
+  const fetcher = async ([url, token]: [url: string, token: string]) => {
+    // const idToken = await fireAuth.currentUser?.getIdToken()
     return axios
       .get<Result>(`${process.env.NEXT_PUBLIC_BACKEND_URL}${url}`, {
         headers: {
-          Authorization: `Bearer ${idToken}`,
+          Authorization: `Bearer ${token}`,
         },
-        params: arg?.params,
       })
       .then((res) => res.data)
       .catch((e: AxiosError<ErrorResponse>) => {
         throw e.response?.data
       })
   }
-  return useSWRMutation<Result, Error, Key, { params?: Params } | undefined>(
-    url,
+  return useSWR<Result, Error, [url: string, token: string] | null>(
+    token ? [url, token] : null,
     fetcher,
   )
 }
@@ -35,9 +31,10 @@ export const usePOSTMutation = <Result, Error = ErrorResponse, Data = object>(
   url: string,
 ) => {
   const fetcher = async (
-    url: string,
+    url: string, // これはuseSWRMutationのurlがくる。
     { arg }: { arg: { data?: Data } | undefined },
   ) => {
+    console.log(url) // mee
     const idToken = await fireAuth.currentUser?.getIdToken()
     return axios
       .post<Result>(`${process.env.NEXT_PUBLIC_BACKEND_URL}${url}`, arg?.data, {

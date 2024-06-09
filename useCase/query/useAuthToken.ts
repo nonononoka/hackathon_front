@@ -2,7 +2,9 @@ import { fireAuth } from "@/lib/auth/firebase";
 import useSWR from "swr";
 
 const getAuthToken = async () => {
-    return await fireAuth.currentUser?.getIdToken();
+    const token = await fireAuth.currentUser?.getIdToken();
+    console.log(token)
+    return token;
 };
 
 export const useAuthToken = () => {

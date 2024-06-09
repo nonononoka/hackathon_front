@@ -1,19 +1,26 @@
-import { SubmitHandler, UseFormRegister, UseFormHandleSubmit } from "react-hook-form";
-import { FormType } from ".";
+import { useTag } from "@/useCase/query/useTag";
+import { useAuthToken } from "@/useCase/query/useAuthToken";
+import { Dispatch, SetStateAction } from "react";
 
-type TweetFormProps = {
-    onSubmit: SubmitHandler<FormType>
-    register: UseFormRegister<FormType>
-    handleSubmit: UseFormHandleSubmit<FormType, undefined>
+type TagFormProps = {
+    setSelectedTags: Dispatch<SetStateAction<string[]>>
 }
 
-// tag検索Form
-export const TagForm = () => {
-    //   const { onSubmit, register, handleSubmit } = props
+export const TagForm = (props: TagFormProps) => {
+    const { setSelectedTags } = props
+    const { data: token } = useAuthToken()
+    const { data, isLoading, error } = useTag(token)
+
+    if (isLoading || error) {
+        return <p>isLoading</p>
+    }
 
     return (
-        <button type="submit">
-            SEARCH
-        </button>
+        <>
+            {data?.map((tag) => <button key={tag.id} onClick={() => setSelectedTags((prevTags) => [...prevTags, tag.tag])}>{tag.tag}</button>)}
+            <button type="submit">
+                SEARCH
+            </button>
+        </>
     )
 }

@@ -1,12 +1,26 @@
 'use client';
 
-import { FC, ReactNode, useEffect } from 'react';
+import { FC, ReactNode, useEffect, createContext } from 'react';
 import { redirect } from 'next/navigation'
 import { useCreateMe } from '@/useCase/command/createMe';
 import { useMe } from '@/useCase/query/useMe';
 import AuthRouteGuard from './AuthRouteGuard';
 import { useAuthToken } from '@/useCase/query/useAuthToken';
 import { useSWRConfig } from 'swr';
+
+export type MeContextType = {
+    email: string | null,
+    name: string | null,
+    id: string | null,
+    token: string | null | undefined
+};
+
+export const MeContext = createContext<MeContextType>({
+    id: null,
+    email: null,
+    name: null,
+    token: null
+});
 
 const MeRouteGuardComponent: FC<{
     children: ReactNode;
@@ -16,7 +30,7 @@ const MeRouteGuardComponent: FC<{
     const { data, isLoading, error, mutate } = useMe(token);
     const { createMe, createMeReset, createMeLoading } = useCreateMe();
     const { cache } = useSWRConfig()
-    console.log(cache)
+    // console.log(cache)
     useEffect(() => {
         if (!isLoading && !data && error && !createMeLoading) {
             if (error.message == "User not found") {
@@ -39,7 +53,7 @@ const MeRouteGuardComponent: FC<{
         return <p>Loading...</p>;
     }
 
-    return <>{children}</>;
+    return <MeContext.Provider value = {{id: data?.id, name:data?.name, email:data?.email, token: token}}>{children}</MeContext.Provider>;
 };
 
 const MeRouteGuard: FC<{

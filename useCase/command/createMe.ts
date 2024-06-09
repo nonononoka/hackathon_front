@@ -1,7 +1,7 @@
 import {
     usePOSTMutation,
 } from "@/lib/swr/useSWR";
-import { MeResponse } from "@/types/apiMe";
+import { UserResponse } from "@/types/apiUser";
 import { ErrorResponse } from "@/types/apiError";
 
 export const useCreateMe = () => {
@@ -11,6 +11,6 @@ export const useCreateMe = () => {
         isMutating: createMeLoading,
         trigger: createMe,
         reset: createMeReset,
-    } = usePOSTMutation<MeResponse, ErrorResponse>("/me");
+    } = usePOSTMutation<UserResponse, ErrorResponse>("/me");
     return { createMeData, createMeError, createMeLoading, createMe, createMeReset }
 }

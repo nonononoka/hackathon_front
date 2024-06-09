@@ -1,11 +1,12 @@
 /**
  * /me のGETレスポンス
  */
-export type MeResponse = {
+export type UserResponse = {
   id: string;
   name: string;
   email: string;
-} | 'error' | 'alreadyExists';
+
+};
 
 /**
  * /me のPUTリクエスト
@@ -14,3 +15,7 @@ export type MePutRequest = {
   user_name: string;
   email: string;
 };
+
+export type FollowRequest = {
+  id: string
+}

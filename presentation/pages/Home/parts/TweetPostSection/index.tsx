@@ -5,15 +5,24 @@ import { TagForm } from "./TagForm";
 import { useTweet } from "@/useCase/query/useTweet";
 import { useCreateTweet } from "@/useCase/command/createTweet";
 import { useAuthToken } from "@/useCase/query/useAuthToken";
+import { useState } from "react";
+import { TweetResponse } from "@/types/apiTweet";
+import { FollowingTweetList } from "./FollowingTweetList";
 
 export type FormType = {
     tweet: string;
     tags?: string[];
 }
 
-export const TweetPostSection = () => {
+type TweetPostSEctionProps = {
+    followingTweets: TweetResponse[] | undefined
+}
+
+export const TweetPostSection = (props: TweetPostSEctionProps) => {
+    const {followingTweets} = props
     const {data: token} = useAuthToken()
-    const { data, isLoading, error, mutate } = useTweet(token)
+    const [selectedTags, setSelectedTags] = useState<string[]>([])
+    const { data, isLoading, error, mutate } = useTweet(token, selectedTags)
     const { createTweetTrigger, createTweetError, createTweetReset } = useCreateTweet()
 
     const { register, handleSubmit, reset } = useForm<FormType>()
@@ -41,8 +50,9 @@ export const TweetPostSection = () => {
     return (
         <>
             <TweetForm onSubmit={onSubmit} register={register} handleSubmit={handleSubmit} />
-            <TagForm />
+            <TagForm setSelectedTags = {setSelectedTags}/>
             <TweetList tweets={data} />
+            <FollowingTweetList tweets = {followingTweets}/>
         </>
     )
 }

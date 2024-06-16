@@ -6,7 +6,6 @@ import { useCreateMe } from '@/useCase/command/createMe';
 import { useMe } from '@/useCase/query/useMe';
 import AuthRouteGuard from './AuthRouteGuard';
 import { useAuthToken } from '@/useCase/query/useAuthToken';
-import { useSWRConfig } from 'swr';
 
 export type MeContextType = {
     email: string | null,
@@ -29,8 +28,7 @@ const MeRouteGuardComponent: FC<{
     const { data: token } = useAuthToken()
     const { data, isLoading, error, mutate } = useMe(token);
     const { createMe, createMeReset, createMeLoading } = useCreateMe();
-    const { cache } = useSWRConfig()
-    // console.log(cache)
+
     useEffect(() => {
         if (!isLoading && !data && error && !createMeLoading) {
             if (error.message == "User not found") {

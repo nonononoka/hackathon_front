@@ -1,4 +1,4 @@
-import { TweetPostSection } from "./parts/TweetPostSection"
+import { TweetsSection } from "./parts/TweetsSection"
 import { UsersSection } from "./parts/UsersSection"
 import { useFollowingTweets } from "@/useCase/query/useFollowingTweets"
 import { useAuthToken } from "@/useCase/query/useAuthToken"
@@ -9,7 +9,7 @@ export const Home = () => {
 
   return (
     <>
-      <TweetPostSection followingTweets = {followingTweets}/>
+      <TweetsSection followingTweets = {followingTweets}/>
       <UsersSection followingTweetsMutate = {mutate}/>
     </>
   )

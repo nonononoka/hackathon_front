@@ -1,5 +1,4 @@
 import { TweetResponse } from "@/types/apiTweet";
-import { useFollowingTweets } from "@/useCase/query/useFollowingTweets";
 
 type Tweets = {
     tweets: TweetResponse[] | undefined

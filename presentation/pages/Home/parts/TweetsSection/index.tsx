@@ -18,7 +18,7 @@ type TweetPostSEctionProps = {
     followingTweets: TweetResponse[] | undefined
 }
 
-export const TweetPostSection = (props: TweetPostSEctionProps) => {
+export const TweetsSection = (props: TweetPostSEctionProps) => {
     const {followingTweets} = props
     const {data: token} = useAuthToken()
     const [selectedTags, setSelectedTags] = useState<string[]>([])

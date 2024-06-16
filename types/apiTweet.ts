@@ -19,3 +19,8 @@ export type TweetPostRequest = {
     tags: string[];
 }
 
+export type ReplyPostRequest = {
+    body: string;
+}
+
+

@@ -1,7 +1,13 @@
 'use client'
 
 import MeRouteGuard from '@/presentation/routing/MeRouteGuard'
-// import AuthRouteGuard from '@/presentation/routing/AuthRouteGuard'
+import TemporaryDrawer from '@/presentation/components/SideBar'
+
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <MeRouteGuard>{children}</MeRouteGuard>
+  return (
+    <MeRouteGuard>
+      <TemporaryDrawer />
+      {children}
+    </MeRouteGuard>
+  )
 }

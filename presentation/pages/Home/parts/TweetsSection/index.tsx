@@ -2,7 +2,7 @@ import { TweetForm } from "./TweetForm"
 import { TweetList } from "./TweetList"
 import { useForm, SubmitHandler } from "react-hook-form";
 import { TagForm } from "./TagForm";
-import { useTweet } from "@/useCase/query/useTweet";
+import { useTaggedTweets } from "@/useCase/query/useTweets";
 import { useCreateTweet } from "@/useCase/command/createTweet";
 import { useAuthToken } from "@/useCase/query/useAuthToken";
 import { useState } from "react";
@@ -22,7 +22,7 @@ export const TweetsSection = (props: TweetPostSEctionProps) => {
     const {followingTweets} = props
     const {data: token} = useAuthToken()
     const [selectedTags, setSelectedTags] = useState<string[]>([])
-    const { data, isLoading, error, mutate } = useTweet(token, selectedTags)
+    const { data, isLoading, error, mutate } = useTaggedTweets(token, selectedTags)
     const { createTweetTrigger, createTweetError, createTweetReset } = useCreateTweet()
 
     const { register, handleSubmit, reset } = useForm<FormType>()

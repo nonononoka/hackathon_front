@@ -1,14 +1,15 @@
 import { TweetResponse } from "@/types/apiTweet";
-import { EachTweet } from "./EachTweet";
+import { EachTweet } from "../Home/parts/TweetsSection/EachTweet";
 
 type Tweets = {
     tweets: TweetResponse[] | undefined
 }
-export const FollowingTweetList = (props: Tweets) => {
+
+export const UsersTweets = (props: Tweets) => {
     const { tweets } = props
     return (
         <>
-            <h1>followしてるuserのツイート</h1>
+            <h1>userのツイート</h1>
             {tweets?.map((tweet) => <EachTweet key={tweet.id} {...tweet} />)}
         </>
     )

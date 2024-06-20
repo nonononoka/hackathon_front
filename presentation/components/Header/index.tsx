@@ -7,6 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Typography from '@mui/material/Typography';
 import { Dispatch, SetStateAction } from 'react';
 import { Box } from '@mui/material';
+import { AccountCircle } from '@mui/icons-material';
 
 const drawerWidth = 240;
 
@@ -49,6 +50,15 @@ export const Header = ({ isSidebarOpen, setIsSidebarOpen }: { isSidebarOpen: boo
                     <Typography variant="h6" noWrap component="div">
                         Persistent drawer
                     </Typography>
+                    <IconButton
+                        size="large"
+                        aria-label="account of current user"
+                        aria-controls="menu-appbar"
+                        aria-haspopup="true"
+                        color="inherit"
+                    >
+                        <AccountCircle />
+                    </IconButton>
                 </Toolbar>
             </AppBar>
         </Box>

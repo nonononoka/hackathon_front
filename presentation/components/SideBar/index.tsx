@@ -14,7 +14,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { Dispatch, SetStateAction } from 'react';
 
-const drawerWidth = 240;
+export const drawerWidth = 240;
 
 export const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',

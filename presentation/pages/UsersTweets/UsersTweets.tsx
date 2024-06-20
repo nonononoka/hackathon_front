@@ -1,5 +1,5 @@
 import { TweetResponse } from "@/types/apiTweet";
-import { EachTweet } from "../Home/parts/TweetsSection/EachTweet";
+import { EachTweet } from "@/presentation/components/Tweet";
 
 type Tweets = {
     tweets: TweetResponse[] | undefined

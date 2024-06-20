@@ -6,7 +6,6 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Typography from '@mui/material/Typography';
 import { Dispatch, SetStateAction } from 'react';
-import { Box } from '@mui/material';
 import { AccountCircle } from '@mui/icons-material';
 
 const drawerWidth = 240;
@@ -35,7 +34,6 @@ const AppBar = styled(MuiAppBar, {
 export const Header = ({ isSidebarOpen, setIsSidebarOpen }: { isSidebarOpen: boolean, setIsSidebarOpen: Dispatch<SetStateAction<boolean>> }) => {
     console.log("header", isSidebarOpen)
     return (
-        <Box sx={{ display: 'flex' }}>
             <AppBar position="fixed" open={isSidebarOpen}>
                 <Toolbar>
                     <IconButton
@@ -48,7 +46,7 @@ export const Header = ({ isSidebarOpen, setIsSidebarOpen }: { isSidebarOpen: boo
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap component="div">
-                        Persistent drawer
+                        Tech Tweet
                     </Typography>
                     <IconButton
                         size="large"
@@ -61,6 +59,5 @@ export const Header = ({ isSidebarOpen, setIsSidebarOpen }: { isSidebarOpen: boo
                     </IconButton>
                 </Toolbar>
             </AppBar>
-        </Box>
     )
 }

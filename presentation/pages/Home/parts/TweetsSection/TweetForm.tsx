@@ -1,5 +1,5 @@
 import { SubmitHandler, UseFormRegister, UseFormHandleSubmit } from "react-hook-form";
-import { FormType } from ".";
+import { FormType } from "../..";
 
 type TweetFormProps = {
   onSubmit: SubmitHandler<FormType>

@@ -1,26 +1,59 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
+import { styled, useTheme } from '@mui/material/styles';
 import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
 import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import { Dispatch, SetStateAction } from 'react';
 
-export default function TemporaryDrawer() {
-    const [open, setOpen] = React.useState(false);
+const drawerWidth = 240;
 
-    const toggleDrawer = (newOpen: boolean) => () => {
-        setOpen(newOpen);
+export const DrawerHeader = styled('div')(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-end',
+}));
+
+export default function Sidebar({ isSidebarOpen, setIsSidebarOpen }: { isSidebarOpen: boolean, setIsSidebarOpen: Dispatch<SetStateAction<boolean>> }) {
+    const theme = useTheme();
+
+    const handleDrawerClose = () => {
+        setIsSidebarOpen(false);
     };
 
-    const DrawerList = (
-        <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+    return (
+        <Drawer
+            sx={{
+                width: drawerWidth,
+                flexShrink: 0,
+                '& .MuiDrawer-paper': {
+                    width: drawerWidth,
+                    boxSizing: 'border-box',
+                },
+            }}
+            variant="persistent"
+            anchor="left"
+            open={isSidebarOpen}
+        >
+            <DrawerHeader>
+                <IconButton onClick={handleDrawerClose}>
+                    {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                </IconButton>
+            </DrawerHeader>
+            <Divider />
             <List>
-                {['Home', 'Message', 'notify', 'configuration'].map((text, index) => (
+                {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
                     <ListItem key={text} disablePadding>
                         <ListItemButton>
                             <ListItemIcon>
@@ -31,15 +64,19 @@ export default function TemporaryDrawer() {
                     </ListItem>
                 ))}
             </List>
-        </Box>
-    );
-
-    return (
-        <div>
-            <Button onClick={toggleDrawer(true)}>Open drawer</Button>
-            <Drawer open={open} onClose={toggleDrawer(false)}>
-                {DrawerList}
-            </Drawer>
-        </div>
+            <Divider />
+            <List>
+                {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                    <ListItem key={text} disablePadding>
+                        <ListItemButton>
+                            <ListItemIcon>
+                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                            </ListItemIcon>
+                            <ListItemText primary={text} />
+                        </ListItemButton>
+                    </ListItem>
+                ))}
+            </List>
+        </Drawer>
     );
 }

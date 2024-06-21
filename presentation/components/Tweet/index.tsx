@@ -1,6 +1,7 @@
 import { useTweets } from "@/useCase/query/useTweets"
 import { useAuthToken } from "@/useCase/query/useAuthToken"
 import { useCreateFavorite } from "@/useCase/command/createFavorite"
+import { useDeleteFavorite } from "@/useCase/command/DeleteFavorite"
 import Link from 'next/link'
 import { useState } from "react"
 import React from 'react';
@@ -17,33 +18,31 @@ type EachTweetProps = {
     postedBy: string,
     postedByName: string,
     likeCount: number,
-    tags: string[]
+    tags: string[],
+    isFaved: boolean
 }
 
 export const EachTweet = (props: EachTweetProps) => {
-    // const { data: token } = useAuthToken()
-    // const [tweet, setTweet] = useState(props)
-    // const { createFavorite } = useCreateFavorite(tweet.id)
-    // const { data, isLoading, mutate, error } = useTweets(token, tweet.id)
-    // const handleFav = () => {
-    //     createFavorite()
-    //         .then(() => mutate())
-    //         .then((data) => { if (!!data) setTweet(data[0]) })
-    // }
-
-    // return (
-    //     <>
-    //         <p key={tweet.id}>{tweet.body}, {tweet.postedAt}, {tweet.postedByName}, {tweet.likeCount} , {tweet.tags}</p>
-    //         <Link href={`/users/${tweet.postedBy}`}>
-    //             {tweet.postedByName}
-    //         </Link>
-    //         <button onClick={handleFav}>likes</button>
-    //         <Link href={`/reply/${tweet.id}`}>
-    //             reply
-    //         </Link>
-    //     </>
-    // )
-    const { id, body, postedAt, postedByName, likeCount, tags } = props
+    const { data: token } = useAuthToken()
+    const [tweet, setTweet] = useState(props)
+    const { id, body, postedAt, postedByName, likeCount, tags, isFaved } = tweet
+    const { createFavorite } = useCreateFavorite(tweet.id)
+    const { deleteFavorite } = useDeleteFavorite(tweet.id)
+    const { data, isLoading, mutate, error } = useTweets(token, tweet.id)
+    const handleFav = () => {
+        if (!isFaved) {
+            createFavorite()
+                .then(() => mutate())
+                .catch((e) => console.log(e))
+                .then((data) => { if (!!data) setTweet(data[0]) })
+        }
+        else {
+            deleteFavorite()
+                .then(() => mutate())
+                .catch((e) => console.log(e))
+                .then((data) => { if (!!data) setTweet(data[0]) })
+        }
+    }
     return (
         <Card variant="outlined">
             <CardHeader
@@ -58,8 +57,8 @@ export const EachTweet = (props: EachTweetProps) => {
             </CardContent>
             <Divider />
             <CardActions disableSpacing>
-                <IconButton aria-label="like">
-                    <FavoriteIcon />
+                <IconButton aria-label="like" onClick={handleFav}>
+                    {isFaved ? <FavoriteIcon style={{ color: '#E0245E' }} /> : <FavoriteIcon />}
                     <Typography variant="body2">{likeCount}</Typography>
                 </IconButton>
                 {/* <IconButton aria-label="retweet">

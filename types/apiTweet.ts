@@ -9,7 +9,8 @@ export type TweetResponse = {
     postedAt: string;
     replyTo: {String: string, Valid: boolean};
     likeCount: number,
-    tags: string[]
+    tags: string[],
+    isFaved: boolean
 }
 
 /**

@@ -21,6 +21,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "presentation/pages/Home/parts/TweetsSection"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "presentation/pages/Home/parts/TweetsDisplay"],
   "exclude": ["node_modules"]
 }

@@ -1,5 +1,5 @@
 'use client'
-
+// 特定のuserのツイートを表示
 import { NextPage } from 'next'
 import { usePathname } from 'next/navigation'
 import { UsersTweetsSection } from '@/presentation/pages/UsersTweets'

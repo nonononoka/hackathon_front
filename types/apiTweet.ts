@@ -9,6 +9,7 @@ export type TweetResponse = {
     postedAt: string;
     replyTo: {String: string, Valid: boolean};
     likeCount: number,
+    replyCount: number,
     tags: string[],
     isFaved: boolean
 }
@@ -21,8 +22,5 @@ export type TweetPostRequest = {
     tags: string[];
 }
 
-export type ReplyPostRequest = {
-    body: string;
-}
 
 

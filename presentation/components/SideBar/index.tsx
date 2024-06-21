@@ -13,6 +13,7 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { Dispatch, SetStateAction } from 'react';
+import { useRouter } from 'next/navigation';
 
 export const drawerWidth = 240;
 
@@ -27,6 +28,7 @@ export const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function Sidebar({ isSidebarOpen, setIsSidebarOpen }: { isSidebarOpen: boolean, setIsSidebarOpen: Dispatch<SetStateAction<boolean>> }) {
     const theme = useTheme();
+    const router = useRouter()
 
     const handleDrawerClose = () => {
         setIsSidebarOpen(false);
@@ -53,9 +55,9 @@ export default function Sidebar({ isSidebarOpen, setIsSidebarOpen }: { isSidebar
             </DrawerHeader>
             <Divider />
             <List>
-                {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+                {['home', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
                     <ListItem key={text} disablePadding>
-                        <ListItemButton>
+                        <ListItemButton onClick = {() => router.push(`/${text}`)}>
                             <ListItemIcon>
                                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                             </ListItemIcon>

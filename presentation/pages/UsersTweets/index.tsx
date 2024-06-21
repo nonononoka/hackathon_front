@@ -1,6 +1,6 @@
 import { useUserTweets } from "@/useCase/query/useTweets"
 import { useAuthToken } from "@/useCase/query/useAuthToken"
-import { UsersTweets } from "./UsersTweets"
+import { UsersTweets } from "./parts/UsersTweets"
 
 type UsersTweetsSectionProps = {
     userID: string

@@ -1,67 +1,14 @@
 import { useFollowingTweets } from "@/useCase/query/useFollowingTweets"
 import { useAuthToken } from "@/useCase/query/useAuthToken"
-import { TweetList } from "@/presentation/components/TweetList"
 import { useTaggedTweets } from "@/useCase/query/useTweets"
-import { TagForm } from "./parts/TweetsSection/TagForm"
+import { TagForm } from "./parts/TweetForm/TagForm"
 import { useState } from "react"
-import { TweetForm } from "./parts/TweetsSection/TweetForm"
+import { TweetForm } from "@/presentation/components/TweetForm"
 import { useCreateTweet } from "@/useCase/command/createTweet";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { useFavoriteTweets } from "@/useCase/query/useFavoriteTweets"
-// export const Home = () => {
-//   const { data: token } = useAuthToken()
-//   const {data: followingTweets, error, isLoading, mutate} = useFollowingTweets(token)
-
-//   return (
-//     <>
-//       <TweetsSection followingTweets = {followingTweets}/>
-//       <UsersSection followingTweetsMutate = {mutate}/>
-//     </>
-//   )
-// }
-
 import * as React from 'react';
-import { useTheme } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { drawerWidth } from '@/presentation/components/SideBar';
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  dir?: string;
-  index: number;
-  value: number;
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`full-width-tabpanel-${index}`}
-      aria-labelledby={`full-width-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-function a11yProps(index: number) {
-  return {
-    id: `full-width-tab-${index}`,
-    'aria-controls': `full-width-tabpanel-${index}`,
-  };
-}
+import { HomeTweets } from "./parts/TweetsDisplay"
 
 export type FormType = {
   tweet: string;
@@ -69,26 +16,34 @@ export type FormType = {
 }
 
 export const Home = () => {
-  const theme = useTheme();
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
-
+  // tweetを送ったりgetしたり
   const { data: token } = useAuthToken()
-  const { data: followingTweets, mutate: followingTweetsMutate } = useFollowingTweets(token)
   const [selectedTags, setSelectedTags] = useState<string[]>([])
-  const { data: allTweets, mutate: allTweetsMutate, isLoading} = useTaggedTweets(token, selectedTags)
+  let { data: followingTweets, mutate: followingTweetsMutate } = useFollowingTweets(token)
+  let { data: allTweets, mutate: allTweetsMutate, isLoading } = useTaggedTweets(token, selectedTags)
   const { createTweetTrigger } = useCreateTweet()
-  const { register, handleSubmit, reset } = useForm<FormType>()
-  const onSubmit: SubmitHandler<FormType> = (data) => {
-    createTweetTrigger({ data: { body: data.tweet, tags: data.tags ? [...data.tags] : [] } })
-      .then(() => allTweetsMutate())
-      .then(() => {
-        reset()
-      })
-  }
+  allTweets = allTweets?.filter((tweet) => !tweet.replyTo.Valid)
+  followingTweets = followingTweets?.filter((tweet) => !tweet.replyTo.Valid)
+  allTweets?.sort((a, b) => {
+    // a と b の postedAt を比較して、降順に並べ替える
+    if (a.postedAt > b.postedAt) {
+        return -1; // a の postedAt が b より大きい場合、a を b より前にする
+    } else if (a.postedAt < b.postedAt) {
+        return 1; // a の postedAt が b より小さい場合、a を b より後ろにする
+    } else {
+        return 0; // postedAt が同じ場合は順序を変えない
+    }
+});
+  followingTweets?.sort((a, b) => {
+    // a と b の postedAt を比較して、降順に並べ替える
+    if (a.postedAt > b.postedAt) {
+        return -1; // a の postedAt が b より大きい場合、a を b より前にする
+    } else if (a.postedAt < b.postedAt) {
+        return 1; // a の postedAt が b より小さい場合、a を b より後ろにする
+    } else {
+        return 0; // postedAt が同じ場合は順序を変えない
+    }
+});
 
   if (isLoading || !allTweets) {
     return <div>Loading</div>
@@ -96,27 +51,9 @@ export const Home = () => {
 
   return (
     <Box sx={{ width: `calc(100vw - ${drawerWidth})`, bgcolor: 'background.paper' }}>
-      <TweetForm onSubmit={onSubmit} register={register} handleSubmit={handleSubmit} />
+      <TweetForm createTweetTrigger={createTweetTrigger} tweetsMutate={allTweetsMutate} handleClose = {null}/>
       <TagForm setSelectedTags={setSelectedTags} />
-      <AppBar position="static">
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          indicatorColor="secondary"
-          textColor="inherit"
-          variant="fullWidth"
-          aria-label="full width tabs example"
-        >
-          <Tab label="All Tweets" {...a11yProps(0)} />
-          <Tab label="Following Tweets" {...a11yProps(1)} />
-        </Tabs>
-      </AppBar>
-      <TabPanel value={value} index={0} dir={theme.direction}>
-        <TweetList tweets={allTweets} />
-      </TabPanel>
-      <TabPanel value={value} index={1} dir={theme.direction}>
-        <TweetList tweets={followingTweets} />
-      </TabPanel>
+      <HomeTweets allTweets={allTweets} followingTweets={followingTweets} allTweetsMutate = {allTweetsMutate} followingTweetsMutate= {followingTweetsMutate}/>
     </Box>
 
   );

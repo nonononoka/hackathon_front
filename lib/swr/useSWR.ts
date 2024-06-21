@@ -9,7 +9,6 @@ export const useGET = <Result, Error = ErrorResponse>(
   token: string | undefined,
 ) => {
   const fetcher = async ([url, token]: [url: string, token: string]) => {
-    // const idToken = await fireAuth.currentUser?.getIdToken()
     return axios
       .get<Result>(`${process.env.NEXT_PUBLIC_BACKEND_URL}${url}`, {
         headers: {
@@ -23,6 +22,28 @@ export const useGET = <Result, Error = ErrorResponse>(
   }
   return useSWR<Result, Error, [url: string, token: string] | null>(
     token ? [url, token] : null,
+    fetcher,
+  )
+}
+
+export const useGETMutation = <Result, Error = ErrorResponse, Params = object>(
+  url: string,
+) => {
+  const fetcher = async (url: string) => {
+    const idToken = await fireAuth.currentUser?.getIdToken()
+    return axios
+      .get<Result>(`${process.env.NEXT_PUBLIC_BACKEND_URL}${url}`, {
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+        },
+      })
+      .then((res) => res.data)
+      .catch((e: AxiosError<ErrorResponse>) => {
+        throw e.response?.data
+      })
+  }
+  return useSWRMutation<Result, Error, Key, { params?: Params } | undefined>(
+    url,
     fetcher,
   )
 }
@@ -91,6 +112,7 @@ export const useDELETEMutation = <
     url: string,
     { arg }: { arg: { data?: Params } | undefined },
   ) => {
+    console.log(url)
     const idToken = await fireAuth.currentUser?.getIdToken()
     return axios
       .delete<Result>(`${process.env.NEXT_PUBLIC_BACKEND_URL}${url}`, {

@@ -1,14 +1,14 @@
 'use client'
-
+// 特定のuserのツイートを表示
 import { NextPage } from 'next'
 import { usePathname } from 'next/navigation'
-import { Reply } from '@/presentation/pages/Home/parts/TweetsSection/Reply'
+import { EachTweetPage } from '@/presentation/pages/EachTweetPage'
 
 const Page: NextPage = () => {
   const pathname = usePathname()
   const parts = pathname.split('/')
-  const id = parts[parts.length - 1]
-  return <Reply id={id} />
+  const tweetID = parts[parts.length - 1]
+  return <EachTweetPage tweetID={tweetID} />
 }
 
 export default Page

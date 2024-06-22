@@ -2,7 +2,6 @@ import { useTweets } from "@/useCase/query/useTweets"
 import { useAuthToken } from "@/useCase/query/useAuthToken"
 import { useCreateFavorite } from "@/useCase/command/createFavorite"
 import { useDeleteFavorite } from "@/useCase/command/deleteFavorite"
-import Link from 'next/link'
 import { useState } from "react"
 import React from 'react';
 import { Avatar, Card, CardHeader, CardContent, CardActions, IconButton, Typography, Divider, Chip } from '@mui/material';

@@ -44,17 +44,38 @@ export const EachTweet = (props: EachTweetProps) => {
     useEffect(() => {
         setTweet({ id, body, postedAt, postedByName, likeCount, tags, isFaved, replyCount })
     }, [id, body, postedAt, postedByName, likeCount, tags, isFaved, replyCount])
-    const handleFav = (e:React.MouseEvent) => {
+
+    const handleFav = (e: React.MouseEvent) => {
         e.stopPropagation()
         if (!tweet.isFaved) {
             createFavorite()
-                .then(() => setTweet({...tweet, isFaved: !tweet.isFaved, likeCount: tweet.likeCount += 1}))
+                .then(() => setTweet({ ...tweet, isFaved: !tweet.isFaved, likeCount: tweet.likeCount += 1 }))
                 .catch((e) => console.log(e))
+                .then(() => {
+                    if (allTweetsMutate) {
+                        allTweetsMutate()
+                    }
+                })
+                .then(() => {
+                    if (followingTweetsMutate) {
+                        followingTweetsMutate()
+                    }
+                })
         }
         else {
             deleteFavorite()
-            .then(() => setTweet({...tweet, isFaved: !tweet.isFaved, likeCount: tweet.likeCount -= 1}))
+                .then(() => setTweet({ ...tweet, isFaved: !tweet.isFaved, likeCount: tweet.likeCount -= 1 }))
                 .catch((e) => console.log(e))
+                .then(() => {
+                    if (allTweetsMutate) {
+                        allTweetsMutate()
+                    }
+                })
+                .then(() => {
+                    if (followingTweetsMutate) {
+                        followingTweetsMutate()
+                    }
+                })
         }
     }
     return (

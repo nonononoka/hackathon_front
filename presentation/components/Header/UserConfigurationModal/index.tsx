@@ -1,8 +1,9 @@
 import { Modal, Box } from "@mui/material"
-import { useCreateReplyTweet } from '@/useCase/command/createReplyTweet';
-import { TweetForm } from "../../TweetForm";
-import { KeyedMutator } from "swr";
-import { TweetResponse } from "@/types/apiTweet";
+import { useState } from "react";
+import { Avatar } from "@files-ui/react";
+import { Typography, Button, TextField, ButtonBase } from "@mui/material";
+import { usePutMe } from "@/useCase/command/putMe";
+import { useTweetContext } from "@/useCase/context/TweetContext";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -21,6 +22,41 @@ export type FormType = {
 }
 
 export const UserConfigurationModal = ({ isOpenModal, handleClose }: { isOpenModal: boolean, handleClose: () => void }) => {
+    const [imageSource, setImageSource] = useState<string>("https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg");
+
+    const handleChangeSource = (selectedFile: File) => {
+        setImageSource(window.URL.createObjectURL(selectedFile));
+    };
+    const { putMe } = usePutMe()
+    const [name, setName] = useState('');
+    const [bio, setBio] = useState('');
+    const { allTweets: { mutate: allTweetsMutate }, followingTweets: { mutate: followingTweetsMutate } } = useTweetContext()
+
+    const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setName(event.target.value);
+    };
+
+    const handleBioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setBio(event.target.value);
+    };
+
+    console.log(imageSource)
+
+    const handleSubmit = async (event: React.FormEvent) => {
+        event.preventDefault()
+        putMe({ data: { name: name, bio: bio, image: imageSource } })
+            .then(() => handleClose())
+            .then(() => {
+                if (allTweetsMutate) {
+                    allTweetsMutate()
+                }
+            })
+            .then(() => {
+                if (followingTweetsMutate) {
+                    followingTweetsMutate()
+                }
+            })
+    }
 
     return (
         <Modal
@@ -29,11 +65,60 @@ export const UserConfigurationModal = ({ isOpenModal, handleClose }: { isOpenMod
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
         >
-            <Box sx={style}>
-                <div>
-                    <p>設定</p>
-                </div>
-            </Box>
+            <div
+                style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    padding: '16px',
+                    maxWidth: '400px',
+                    margin: 'auto',
+                    marginTop: '64px',
+                    backgroundColor: '#f0f0f0',
+                    borderRadius: '8px',
+                    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+                }}
+            >
+                <Avatar changeLabel="upload avatar" src={imageSource ? imageSource : ""} variant="circle" onChange={handleChangeSource} />
+                <Typography variant="h5" marginTop={5}>Edit Profile</Typography>
+                <form
+                    style={{ width: '100%', marginTop: '16px' }}
+                    onSubmit={handleSubmit}
+                >
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="name"
+                        label="Name"
+                        name="name"
+                        value={name}
+                        onChange={handleNameChange}
+                    />
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        fullWidth
+                        id="bio"
+                        label="Bio"
+                        name="bio"
+                        multiline
+                        rows={4}
+                        value={bio}
+                        onChange={handleBioChange}
+                    />
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        style={{ marginTop: '16px' }}
+                    >
+                        Save Changes
+                    </Button>
+                </form>
+            </div>
         </Modal>
     )
 }

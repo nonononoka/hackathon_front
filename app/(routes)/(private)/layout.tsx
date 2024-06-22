@@ -7,6 +7,7 @@ import { Header } from '@/presentation/components/Header'
 import Sidebar, { DrawerHeader } from '@/presentation/components/SideBar'
 import { useSidebar } from '@/presentation/components/SideBar/hooks/useSidebar'
 import MeRouteGuard from '@/presentation/routing/MeRouteGuard'
+import { TweetContextProvider } from '@/useCase/context/TweetContext'
 const drawerWidth = 240
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
@@ -32,21 +33,23 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <MeRouteGuard>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <Header
-          isSidebarOpen={isSidebarOpen}
-          setIsSidebarOpen={setIsSidebarOpen}
-        />
-        <Sidebar
-          isSidebarOpen={isSidebarOpen}
-          setIsSidebarOpen={setIsSidebarOpen}
-        />
-        <Main open={isSidebarOpen}>
-          <DrawerHeader />
-          {children}
-        </Main>
-      </Box>
+      <TweetContextProvider>
+        <Box sx={{ display: 'flex' }}>
+          <CssBaseline />
+          <Header
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+          <Sidebar
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+          <Main open={isSidebarOpen}>
+            <DrawerHeader />
+            {children}
+          </Main>
+        </Box>
+      </TweetContextProvider>
     </MeRouteGuard>
   )
 }

@@ -5,6 +5,7 @@ export type TweetResponse = {
     id: string;
     body: string;
     postedByName: string;
+    postedByImage: {String: string, Valid: boolean};
     postedBy: string;
     postedAt: string;
     replyTo: {String: string, Valid: boolean};

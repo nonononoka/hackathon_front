@@ -4,39 +4,44 @@ import { useUnfollowUser } from "@/useCase/command/unfollowUser"
 import { KeyedMutator } from "swr"
 import { UserResponse } from "@/types/apiUser"
 import { useState } from "react"
+import { useTweetContext } from "@/useCase/context/TweetContext"
 
 type UserProps = {
     id: string,
     name: string,
     email: string,
-    isFollowing: boolean,
-    isFollowed: boolean,
+    isFollowing?: boolean,
+    isFollowed?: boolean,
+    image: {String: string, Valid: boolean}
     followingUsersMutate: KeyedMutator<UserResponse[]>
     allUsersMutate: KeyedMutator<UserResponse[]>
 }
 
 export const EachUser = (props: UserProps) => {
     console.log(props)
-    const { id, email, name, isFollowing, isFollowed, followingUsersMutate, allUsersMutate } = props
-    const [user, setUser] = useState({ id, email, name, isFollowing, isFollowed })
+    const { id, email, name, image, isFollowing, isFollowed, followingUsersMutate, allUsersMutate } = props
+    const [user, setUser] = useState({ id, email, name, image, isFollowing, isFollowed })
     const { followUser } = useFollowUser(id)
     const { unfollowUser } = useUnfollowUser(id)
+    const { followingTweets: { mutate: followingTweetsMutate } } = useTweetContext()
     const handleFollowClick = () => {
         if (!user.isFollowing) {
             followUser()
+                .then(() => { setUser({ ...user, isFollowing: true }) })
                 .then(() => {
-                    setUser({ ...user, isFollowing: true })
-                    console.log("followしたよ")
+                    const promises = [allUsersMutate(), followingUsersMutate(), followingTweetsMutate()]
+                    return Promise.all([promises])
                 })
-                .then(() => allUsersMutate())
-                .then(() => followingUsersMutate())
-                .then(() => console.log("follow done!"))
+                .catch((e) => console.error(e))
         }
         else {
             unfollowUser()
                 .then(() => setUser({ ...user, isFollowing: false }))
-                .then(() => allUsersMutate())
-                .then(() => followingUsersMutate())
+                .then(() => {
+                    const promises = [allUsersMutate(), followingUsersMutate(), followingTweetsMutate()]
+                    return Promise.all([promises])
+                })
+                .catch((e) => console.error(e))
         }
     };
     const tags = ["go", "html", "css"]
@@ -46,7 +51,7 @@ export const EachUser = (props: UserProps) => {
         <>
             <ListItem key={user.id} disablePadding>
                 <ListItemAvatar>
-                    <Avatar alt={user.name} />
+                    <Avatar alt={user.name} src={user.image.String} />
                 </ListItemAvatar>
                 <ListItemText
                     primary={user.name}

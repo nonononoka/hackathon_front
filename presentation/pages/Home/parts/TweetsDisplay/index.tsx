@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import { useState } from 'react';
-import { TweetList } from '@/presentation/components/TweetList';
+import { TweetList } from '@/presentation/pages/Home/parts/TweetList';
 import { TweetResponse } from '@/types/apiTweet';
 import { KeyedMutator } from 'swr';
 
@@ -46,11 +46,9 @@ function a11yProps(index: number) {
 type HomeTweetsProps = {
     allTweets: TweetResponse[] | undefined,
     followingTweets : TweetResponse[] | undefined,
-    allTweetsMutate: KeyedMutator<TweetResponse[]>,
-    followingTweetsMutate: KeyedMutator<TweetResponse[]>
 }
 
-export const HomeTweets = ({ allTweets, followingTweets, allTweetsMutate, followingTweetsMutate }: HomeTweetsProps) => {
+export const HomeTweets = ({ allTweets, followingTweets }: HomeTweetsProps) => {
     const theme = useTheme();
     const [value, setValue] = useState(0);
 
@@ -74,10 +72,10 @@ export const HomeTweets = ({ allTweets, followingTweets, allTweetsMutate, follow
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0} dir={theme.direction}>
-                <TweetList tweets={allTweets} allTweetsMutate={allTweetsMutate} followingTweetsMutate = {followingTweetsMutate} />
+                <TweetList tweets={allTweets}/>
             </TabPanel>
             <TabPanel value={value} index={1} dir={theme.direction}>
-                <TweetList tweets={followingTweets} allTweetsMutate={allTweetsMutate} followingTweetsMutate = {followingTweetsMutate}/>
+                <TweetList tweets={followingTweets}/>
             </TabPanel>
         </>
     )

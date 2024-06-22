@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation"
 import { KeyedMutator } from "swr";
 import { TweetResponse } from "@/types/apiTweet";
 import { useEffect } from "react"
+import { useTweetContext } from "@/useCase/context/TweetContext"
 
 type EachTweetProps = {
     id: string,
@@ -23,26 +24,25 @@ type EachTweetProps = {
     postedAt: string,
     postedBy: string,
     postedByName: string,
+    postedByImage: { String: string, Valid: boolean },
     likeCount: number,
     replyCount: number,
     tags: string[],
     isFaved: boolean,
-    allTweetsMutate: KeyedMutator<TweetResponse[]> | null
-    followingTweetsMutate: KeyedMutator<TweetResponse[]> | null
+    otherMutate: KeyedMutator<TweetResponse[]>
 }
 
 export const EachTweet = (props: EachTweetProps) => {
     const router = useRouter()
     const { isOpenModal, setOpenModal } = useModal()
-    // const { data: token } = useAuthToken()
-    const { id, body, postedAt, postedByName, likeCount, replyCount, tags, isFaved, allTweetsMutate, followingTweetsMutate } = props
-    const [tweet, setTweet] = useState({ id, body, postedAt, postedByName, likeCount, tags, isFaved, replyCount })
-    // const { data, trigger, error } = useTweets(token, tweet.id)
+    const { id, body, postedAt, postedBy, postedByName, postedByImage, likeCount, replyCount, tags, isFaved, otherMutate } = props
+    const [tweet, setTweet] = useState({ id, body, postedAt, postedBy, postedByName, postedByImage, likeCount, tags, isFaved, replyCount })
     const { createFavorite } = useCreateFavorite(tweet.id)
     const { deleteFavorite } = useDeleteFavorite(tweet.id)
+    let { allTweets: { mutate: allTweetsMutate }, followingTweets: { mutate: followingTweetsMutate } } = useTweetContext()
 
     useEffect(() => {
-        setTweet({ id, body, postedAt, postedByName, likeCount, tags, isFaved, replyCount })
+        setTweet({ id, body, postedAt, postedBy, postedByName, postedByImage, likeCount, tags, isFaved, replyCount })
     }, [id, body, postedAt, postedByName, likeCount, tags, isFaved, replyCount])
 
     const handleFav = (e: React.MouseEvent) => {
@@ -82,7 +82,7 @@ export const EachTweet = (props: EachTweetProps) => {
         <>
             <Card variant="outlined" onClick={() => router.push(`/tweet/${tweet.id}`)}>
                 <CardHeader
-                    // avatar={<Avatar src={user.profileImageUrl} alt={user.name} />}
+                    avatar={<Avatar src={tweet.postedByImage.String} alt={tweet.postedByName} onClick={(e: React.MouseEvent) => { e.stopPropagation(); router.push(`/users/${tweet.postedBy}`) }} />}
                     title={tweet.postedByName}
                     subheader={`@${tweet.postedByName} • ${tweet.postedAt}`}
                 />
@@ -116,7 +116,7 @@ export const EachTweet = (props: EachTweetProps) => {
                 </IconButton> */}
                 </CardActions>
             </Card>
-            <ReplyModal tweetID={tweet.id} isOpenModal={isOpenModal} handleClose={() => setOpenModal(false)} allTweetsMutate={allTweetsMutate} followingTweetsMutate={followingTweetsMutate} />
+            <ReplyModal tweetID={tweet.id} isOpenModal={isOpenModal} handleClose={() => setOpenModal(false)} otherMutate={otherMutate} />
         </>
     );
 }

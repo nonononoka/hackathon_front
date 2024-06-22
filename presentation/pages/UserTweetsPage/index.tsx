@@ -1,10 +1,10 @@
+import { useUserTweets } from "@/useCase/query/useTweets"
 import { useAuthToken } from "@/useCase/query/useAuthToken"
-import { ThreadTweetList } from "./parts/ThreadTweetList"
-import { useThreadTweets } from "@/useCase/query/useThreadTweets"
+import { UserTweetsList } from "./parts/UserTweetsList"
 
-export const EachTweetPage = ({ tweetID }: { tweetID: string }) => {
+export const UserTweetsPage = ({userID}: {userID: string}) => {
     const { data: token } = useAuthToken()
-    const { data, isLoading, mutate, error } = useThreadTweets(token, tweetID)
+    const { data, isLoading, mutate, error } = useUserTweets(token, userID)
     if (isLoading) {
         return <p>isLoading...</p>
     }
@@ -22,7 +22,7 @@ export const EachTweetPage = ({ tweetID }: { tweetID: string }) => {
 
     return (
         <>
-            <ThreadTweetList tweets={data} mutate = {mutate} />
+            <UserTweetsList tweets={data} mutate={mutate} />
         </>
     )
 }

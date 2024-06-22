@@ -5,10 +5,12 @@ export type UserResponse = {
   id: string;
   name: string;
   email: string;
+  bio: { String: string, Valid: boolean };
+  image: { String: string, Valid: boolean };
   // このユーザーをフォローしてるか
-  isFollowing: boolean;
+  isFollowing?: boolean;
   // このユーザーにフォローされてるか
-  isFollowed: boolean;
+  isFollowed?: boolean;
 };
 
 /**

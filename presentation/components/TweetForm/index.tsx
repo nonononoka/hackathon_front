@@ -8,23 +8,21 @@ import { MuiChipsInput } from "mui-chips-input";
 import { useTweetContext } from "@/useCase/context/TweetContext";
 import React, { useState } from 'react';
 import { TextField, Button, Box } from '@mui/material';
-import { resolve } from "path";
 
 type TweetFormProps = {
     createTweetTrigger: TriggerWithOptionsArgs<TweetResponse, ErrorResponse, Key, {
         data?: TweetPostRequest | undefined;
     } | undefined>,
-    otherMutate?: KeyedMutator<TweetResponse[]> | null,
+    otherMutates?: KeyedMutator<TweetResponse[]>[] | null,
     handleClose?: { (): void } | null,
 }
 
-
 export const TweetForm: React.FC<TweetFormProps> = (props: TweetFormProps) => {
-    const { createTweetTrigger, otherMutate, handleClose } = props;
+    const { createTweetTrigger, otherMutates, handleClose } = props;
     const { allTweets: { mutate: allTweetsMutate }, followingTweets: { mutate: followingTweetsMutate } } = useTweetContext()
     const [tweetText, setTweetText] = useState('');
     const [tags, setTags] = useState<string[]>([]); // 入力されたタグのリスト
-    console.log(tags)
+
     const handleChange = (tags: string[]) => {
         setTags(tags);
     };
@@ -32,8 +30,8 @@ export const TweetForm: React.FC<TweetFormProps> = (props: TweetFormProps) => {
         createTweetTrigger({ data: { body: tweetText, tags: hashtags } })
             .then(() => {
                 const promises = [allTweetsMutate(), followingTweetsMutate()]
-                if (otherMutate) {
-                    promises.push(otherMutate())
+                if (otherMutates) {
+                    otherMutates.forEach((mutate) => promises.push(mutate()))
                 }
                 return Promise.all([promises])
             })

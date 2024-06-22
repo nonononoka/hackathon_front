@@ -55,7 +55,7 @@ export default function Sidebar({ isSidebarOpen, setIsSidebarOpen }: { isSidebar
             </DrawerHeader>
             <Divider />
             <List>
-                {['home', 'users', 'Send email', 'Drafts'].map((text, index) => (
+                {['home', 'users', 'search', 'Drafts'].map((text, index) => (
                     <ListItem key={text} disablePadding>
                         <ListItemButton onClick = {() => router.push(`/${text}`)}>
                             <ListItemIcon>

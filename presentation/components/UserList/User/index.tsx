@@ -8,19 +8,21 @@ import { useTweetContext } from "@/useCase/context/TweetContext"
 
 type UserProps = {
     id: string,
+    bio: { String: string, Valid: boolean };
     name: string,
     email: string,
     isFollowing?: boolean,
     isFollowed?: boolean,
-    image: {String: string, Valid: boolean}
+    image: { String: string, Valid: boolean }
     followingUsersMutate: KeyedMutator<UserResponse[]>
+    followedUsersMutate: KeyedMutator<UserResponse[]>
     allUsersMutate: KeyedMutator<UserResponse[]>
 }
 
 export const EachUser = (props: UserProps) => {
     console.log(props)
-    const { id, email, name, image, isFollowing, isFollowed, followingUsersMutate, allUsersMutate } = props
-    const [user, setUser] = useState({ id, email, name, image, isFollowing, isFollowed })
+    const { id, email, name, image, isFollowing, bio, isFollowed, followingUsersMutate, allUsersMutate, followedUsersMutate } = props
+    const [user, setUser] = useState({ id, email, bio, name, image, isFollowing, isFollowed })
     const { followUser } = useFollowUser(id)
     const { unfollowUser } = useUnfollowUser(id)
     const { followingTweets: { mutate: followingTweetsMutate } } = useTweetContext()
@@ -29,7 +31,7 @@ export const EachUser = (props: UserProps) => {
             followUser()
                 .then(() => { setUser({ ...user, isFollowing: true }) })
                 .then(() => {
-                    const promises = [allUsersMutate(), followingUsersMutate(), followingTweetsMutate()]
+                    const promises = [allUsersMutate(), followingUsersMutate(), followingTweetsMutate(), followedUsersMutate()]
                     return Promise.all([promises])
                 })
                 .catch((e) => console.error(e))
@@ -38,14 +40,12 @@ export const EachUser = (props: UserProps) => {
             unfollowUser()
                 .then(() => setUser({ ...user, isFollowing: false }))
                 .then(() => {
-                    const promises = [allUsersMutate(), followingUsersMutate(), followingTweetsMutate()]
+                    const promises = [allUsersMutate(), followingUsersMutate(), followingTweetsMutate(), followedUsersMutate()]
                     return Promise.all([promises])
                 })
                 .catch((e) => console.error(e))
         }
     };
-    const tags = ["go", "html", "css"]
-    // console.log(user)
 
     return (
         <>
@@ -55,13 +55,7 @@ export const EachUser = (props: UserProps) => {
                 </ListItemAvatar>
                 <ListItemText
                     primary={user.name}
-                    secondary={
-                        <>
-                            {tags.map((tag, index) => (
-                                <Chip key={index} label={tag} style={{ marginRight: 15 }} />
-                            ))}
-                        </>
-                    }
+                    secondary={user.bio.String}
                 />
                 <Button
                     variant="contained"

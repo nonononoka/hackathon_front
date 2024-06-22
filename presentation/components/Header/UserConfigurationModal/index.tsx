@@ -1,9 +1,10 @@
 import { Modal, Box } from "@mui/material"
 import { useState } from "react";
 import { Avatar } from "@files-ui/react";
-import { Typography, Button, TextField, ButtonBase } from "@mui/material";
+import { Typography, Button, TextField } from "@mui/material";
 import { usePutMe } from "@/useCase/command/putMe";
 import { useTweetContext } from "@/useCase/context/TweetContext";
+import { useMeContext } from "@/presentation/routing/MeRouteGuard";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -22,14 +23,15 @@ export type FormType = {
 }
 
 export const UserConfigurationModal = ({ isOpenModal, handleClose }: { isOpenModal: boolean, handleClose: () => void }) => {
-    const [imageSource, setImageSource] = useState<string>("https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg");
+    const me = useMeContext()
+    const [imageSource, setImageSource] = useState<string>(me.image ? me.image : "");
 
     const handleChangeSource = (selectedFile: File) => {
         setImageSource(window.URL.createObjectURL(selectedFile));
     };
     const { putMe } = usePutMe()
-    const [name, setName] = useState('');
-    const [bio, setBio] = useState('');
+    const [name, setName] = useState(me.name);
+    const [bio, setBio] = useState(me.bio);
     const { allTweets: { mutate: allTweetsMutate }, followingTweets: { mutate: followingTweetsMutate } } = useTweetContext()
 
     const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {

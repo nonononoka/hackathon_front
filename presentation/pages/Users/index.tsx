@@ -49,7 +49,7 @@ export const Users = () => {
     const { data: token } = useAuthToken()
     const { data: allUsers, mutate: allUsersMutate } = useUsers(token)
     const { data: followingUsers, mutate: followingUsersMutate } = useFollowingUsers(token)
-    const { data: followedUsers} = useFollowedUsers(token)
+    const { data: followedUsers, mutate: followedUsersMutate } = useFollowedUsers(token)
     const [value, setValue] = useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -73,13 +73,13 @@ export const Users = () => {
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0} dir={theme.direction}>
-                <UserList users={allUsers} allUsersMutate = {allUsersMutate} followingUsersMutate={followingUsersMutate} />
+                <UserList users={allUsers} allUsersMutate={allUsersMutate} followingUsersMutate={followingUsersMutate} followedUsersMutate={followedUsersMutate} />
             </TabPanel>
             <TabPanel value={value} index={1} dir={theme.direction}>
-                <UserList users={followingUsers} allUsersMutate = {allUsersMutate} followingUsersMutate={followingUsersMutate} />
+                <UserList users={followingUsers} allUsersMutate={allUsersMutate} followingUsersMutate={followingUsersMutate} followedUsersMutate={followedUsersMutate}/>
             </TabPanel>
             <TabPanel value={value} index={2} dir={theme.direction}>
-                <UserList users={followedUsers} allUsersMutate = {allUsersMutate} followingUsersMutate={followingUsersMutate} />
+                <UserList users={followedUsers} allUsersMutate={allUsersMutate} followingUsersMutate={followingUsersMutate} followedUsersMutate={followedUsersMutate}/>
             </TabPanel>
         </>
     )

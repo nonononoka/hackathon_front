@@ -1,5 +1,5 @@
 import { useAuthToken } from "@/useCase/query/useAuthToken"
-import { ThreadTweetList } from "./parts/ThreadTweetList"
+import { TweetList } from "@/presentation/components/TweetList"
 import { useThreadTweets } from "@/useCase/query/useThreadTweets"
 
 export const EachTweetPage = ({ tweetID }: { tweetID: string }) => {
@@ -10,19 +10,18 @@ export const EachTweetPage = ({ tweetID }: { tweetID: string }) => {
     }
 
     data?.sort((a, b) => {
-        // a と b の postedAt を比較して、降順に並べ替える
         if (a.postedAt < b.postedAt) {
-            return -1; // a の postedAt が b より大きい場合、a を b より前にする
+            return -1;
         } else if (a.postedAt > b.postedAt) {
-            return 1; // a の postedAt が b より小さい場合、a を b より後ろにする
+            return 1;
         } else {
-            return 0; // postedAt が同じ場合は順序を変えない
+            return 0;
         }
     });
 
     return (
         <>
-            <ThreadTweetList tweets={data} mutate = {mutate} />
+            <TweetList tweets={data} mutates={[mutate]} />
         </>
     )
 }

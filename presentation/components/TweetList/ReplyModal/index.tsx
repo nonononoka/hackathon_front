@@ -1,6 +1,6 @@
 import { Modal, Box } from "@mui/material"
 import { useCreateReplyTweet } from '@/useCase/command/createReplyTweet';
-import { TweetForm } from "../../../../../components/TweetForm";
+import { TweetForm } from "../../TweetForm";
 import { KeyedMutator } from "swr";
 import { TweetResponse } from "@/types/apiTweet";
 
@@ -20,9 +20,9 @@ export type FormType = {
     tweet: string;
 }
 
-export const ReplyModal = ({ tweetID, isOpenModal, handleClose, allTweetsMutate, followingTweetsMutate }: { tweetID: string, isOpenModal: boolean, handleClose: () => void , allTweetsMutate: KeyedMutator<TweetResponse[]> | null, followingTweetsMutate:  KeyedMutator<TweetResponse[]> | null}) => {
+export const ReplyModal = ({ tweetID, isOpenModal, handleClose, otherMutates }: { tweetID: string, isOpenModal: boolean, handleClose: () => void, otherMutates?: KeyedMutator<TweetResponse[]>[] }) => {
     const { createReplyTweetTrigger } = useCreateReplyTweet(tweetID)
-    
+
     return (
         <Modal
             open={isOpenModal}
@@ -31,7 +31,7 @@ export const ReplyModal = ({ tweetID, isOpenModal, handleClose, allTweetsMutate,
             aria-describedby="modal-modal-description"
         >
             <Box sx={style}>
-                <TweetForm handleClose = {handleClose} createTweetTrigger={createReplyTweetTrigger}/>
+                <TweetForm handleClose={handleClose} createTweetTrigger={createReplyTweetTrigger} otherMutates={otherMutates} />
             </Box>
         </Modal>
     )

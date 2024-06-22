@@ -1,25 +1,42 @@
 'use client';
 
-import { FC, ReactNode, useEffect, createContext } from 'react';
+import { FC, ReactNode, useEffect, createContext, useContext } from 'react';
 import { redirect } from 'next/navigation'
 import { useCreateMe } from '@/useCase/command/createMe';
 import { useMe } from '@/useCase/query/useMe';
 import AuthRouteGuard from './AuthRouteGuard';
 import { useAuthToken } from '@/useCase/query/useAuthToken';
+import { KeyedMutator } from 'swr';
+import { UserResponse } from '@/types/apiUser';
 
 export type MeContextType = {
     email: string | null,
     name: string | null,
     id: string | null,
-    token: string | null | undefined
+    bio: string | null,
+    image : string | null,
+    token: string | null | undefined,
+    mutate: KeyedMutator<UserResponse> | null
 };
 
 export const MeContext = createContext<MeContextType>({
     id: null,
     email: null,
     name: null,
-    token: null
+    token: null,
+    bio: null, 
+    image: null,
+    mutate: null
 });
+
+// Contextを使用するためのカスタムフック
+export const useMeContext = () => {
+    const context = useContext(MeContext);
+    if (!context) {
+        throw new Error('useTweetContext must be used within a TweetProvider');
+    }
+    return context;
+};
 
 const MeRouteGuardComponent: FC<{
     children: ReactNode;
@@ -51,7 +68,7 @@ const MeRouteGuardComponent: FC<{
         return <p>Loading...</p>;
     }
 
-    return <MeContext.Provider value = {{id: data?.id, name:data?.name, email:data?.email, token: token}}>{children}</MeContext.Provider>;
+    return <MeContext.Provider value = {{id: data?.id, name:data?.name, email:data?.email, token: token, bio: data?.bio.String, image: data?.image.String, mutate: mutate}}>{children}</MeContext.Provider>;
 };
 
 const MeRouteGuard: FC<{

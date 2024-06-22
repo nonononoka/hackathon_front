@@ -4,13 +4,14 @@ import { KeyedMutator } from "swr";
 
 type Tweets = {
     tweets: TweetResponse[] | undefined
+    mutates?: KeyedMutator<TweetResponse[]>[]
 }
 export const TweetList = (props: Tweets) => {
-    const { tweets} = props
+    const { tweets, mutates } = props
 
     return (
         <>
-            {tweets?.map((tweet) => <EachTweet key={tweet.id} {...tweet}/>)}
+            {tweets?.map((tweet) => <EachTweet key={tweet.id} {...tweet} otherMutates={mutates} />)}
         </>
     )
 }

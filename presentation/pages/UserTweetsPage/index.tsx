@@ -1,8 +1,8 @@
 import { useUserTweets } from "@/useCase/query/useTweets"
 import { useAuthToken } from "@/useCase/query/useAuthToken"
-import { UserTweetsList } from "./parts/UserTweetsList"
+import { TweetList } from "@/presentation/components/TweetList"
 
-export const UserTweetsPage = ({userID}: {userID: string}) => {
+export const UserTweetsPage = ({ userID }: { userID: string }) => {
     const { data: token } = useAuthToken()
     const { data, isLoading, mutate, error } = useUserTweets(token, userID)
     if (isLoading) {
@@ -22,7 +22,7 @@ export const UserTweetsPage = ({userID}: {userID: string}) => {
 
     return (
         <>
-            <UserTweetsList tweets={data} mutate={mutate} />
+            <TweetList tweets={data} mutates={[mutate]} />
         </>
     )
 }

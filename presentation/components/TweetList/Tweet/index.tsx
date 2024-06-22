@@ -5,7 +5,7 @@ import { useDeleteFavorite } from "@/useCase/command/deleteFavorite"
 import Link from 'next/link'
 import { useState } from "react"
 import React from 'react';
-import { Avatar, Card, CardHeader, CardContent, CardActions, IconButton, Typography, Divider } from '@mui/material';
+import { Avatar, Card, CardHeader, CardContent, CardActions, IconButton, Typography, Divider, Chip } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import RepeatIcon from '@mui/icons-material/Repeat';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
@@ -24,18 +24,18 @@ type EachTweetProps = {
     postedAt: string,
     postedBy: string,
     postedByName: string,
-    postedByImage: { String: string, Valid: boolean },
+    postedByImage: { String: string, Valid: boolean }
     likeCount: number,
     replyCount: number,
     tags: string[],
     isFaved: boolean,
-    otherMutate: KeyedMutator<TweetResponse[]>
+    otherMutates?: KeyedMutator<TweetResponse[]>[]
 }
 
 export const EachTweet = (props: EachTweetProps) => {
     const router = useRouter()
     const { isOpenModal, setOpenModal } = useModal()
-    const { id, body, postedAt, postedBy, postedByName, postedByImage, likeCount, replyCount, tags, isFaved, otherMutate } = props
+    const { id, body, postedAt, postedBy, postedByName, postedByImage, likeCount, replyCount, tags, isFaved, otherMutates } = props
     const [tweet, setTweet] = useState({ id, body, postedAt, postedBy, postedByName, postedByImage, likeCount, tags, isFaved, replyCount })
     const { createFavorite } = useCreateFavorite(tweet.id)
     const { deleteFavorite } = useDeleteFavorite(tweet.id)
@@ -43,39 +43,38 @@ export const EachTweet = (props: EachTweetProps) => {
 
     useEffect(() => {
         setTweet({ id, body, postedAt, postedBy, postedByName, postedByImage, likeCount, tags, isFaved, replyCount })
-    }, [id, body, postedAt, postedByName, likeCount, tags, isFaved, replyCount])
-
+    }, [id, body, postedAt, postedBy, postedByName, postedByImage, likeCount, tags, isFaved, replyCount])
+    console.log(tweet.postedByImage)
     const handleFav = (e: React.MouseEvent) => {
         e.stopPropagation()
         if (!tweet.isFaved) {
             createFavorite()
                 .then(() => setTweet({ ...tweet, isFaved: !tweet.isFaved, likeCount: tweet.likeCount += 1 }))
+                .then(() => {
+                    const promises = [allTweetsMutate(), followingTweetsMutate()]
+                    if (otherMutates) {
+                        otherMutates.forEach((mutate) => promises.push(mutate()))
+                    }
+                    return Promise.all([promises])
+                })
                 .catch((e) => console.log(e))
-                .then(() => {
-                    if (allTweetsMutate) {
-                        allTweetsMutate()
-                    }
-                })
-                .then(() => {
-                    if (followingTweetsMutate) {
-                        followingTweetsMutate()
-                    }
-                })
         }
         else {
             deleteFavorite()
                 .then(() => setTweet({ ...tweet, isFaved: !tweet.isFaved, likeCount: tweet.likeCount -= 1 }))
-                .catch((e) => console.log(e))
                 .then(() => {
                     if (allTweetsMutate) {
                         allTweetsMutate()
                     }
                 })
                 .then(() => {
-                    if (followingTweetsMutate) {
-                        followingTweetsMutate()
+                    const promises = [allTweetsMutate(), followingTweetsMutate()]
+                    if (otherMutates) {
+                        otherMutates.forEach((mutate) => promises.push(mutate()))
                     }
+                    return Promise.all([promises])
                 })
+                .catch((e) => console.log(e))
         }
     }
     return (
@@ -91,6 +90,15 @@ export const EachTweet = (props: EachTweetProps) => {
                         {tweet.body}
                     </Typography>
                 </CardContent>
+                {tweet.tags && (
+                    <CardContent>
+                        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                            {tweet.tags.map((tag, index) => (
+                                <Chip key={index} label={tag} color="primary" variant="outlined" />
+                            ))}
+                        </div>
+                    </CardContent>
+                )}
                 <Divider />
                 <CardActions disableSpacing>
                     <IconButton aria-label="like" onClick={handleFav}>
@@ -116,7 +124,7 @@ export const EachTweet = (props: EachTweetProps) => {
                 </IconButton> */}
                 </CardActions>
             </Card>
-            <ReplyModal tweetID={tweet.id} isOpenModal={isOpenModal} handleClose={() => setOpenModal(false)} otherMutate={otherMutate} />
+            <ReplyModal tweetID={tweet.id} isOpenModal={isOpenModal} handleClose={() => setOpenModal(false)} otherMutates={otherMutates} />
         </>
     );
 }

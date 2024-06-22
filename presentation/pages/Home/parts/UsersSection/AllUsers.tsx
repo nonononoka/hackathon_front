@@ -1,6 +1,6 @@
 import { UserResponse } from "@/types/apiUser"
 import { KeyedMutator } from "swr"
-import { useFollowFriend } from "@/useCase/command/followFriend"
+import { useFollowUser } from "@/useCase/command/followUser"
 import { useEffect, useState, useContext } from "react"
 import { MeContext } from "@/presentation/routing/MeRouteGuard"
 import { TweetResponse } from "@/types/apiTweet"
@@ -15,7 +15,7 @@ export const AllUsers = (props: AllUsersProps) => {
     const { id } = useContext(MeContext)
     const { allUsers, followingUsersMutate, followingTweetsMutate } = props
     const [followingUserID, setFollowingUserID] = useState<string | null>(null)
-    const { followUser } = useFollowFriend(followingUserID)
+    const { followUser } = useFollowUser(followingUserID)
     const handleFollow = (followingUserID: string) => {
         setFollowingUserID(followingUserID)
     }

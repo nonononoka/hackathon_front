@@ -10,7 +10,7 @@ export const UsersTweets = (props: Tweets) => {
     return (
         <>
             <h1>userのツイート</h1>
-            {tweets?.map((tweet) => <EachTweet key={tweet.id} {...tweet} tweetsMutate={null}/>)}
+            {tweets?.map((tweet) => <EachTweet key={tweet.id} {...tweet} allTweetsMutate={null} followingTweetsMutate={null}/>)}
         </>
     )
 }

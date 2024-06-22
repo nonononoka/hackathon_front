@@ -4,6 +4,6 @@ import {
 import { UserResponse } from "@/types/apiUser";
 
 export const useFollowingUsers = (token: string | undefined) => {
-    const { data, error, isLoading, mutate } = useGET<UserResponse[]>("/friendships/follow", token);
+    const { data, error, isLoading, mutate } = useGET<UserResponse[]>("/users/me/following", token);
     return { data, error, isLoading, mutate }
 }

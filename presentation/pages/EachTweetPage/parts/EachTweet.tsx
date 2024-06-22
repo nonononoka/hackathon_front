@@ -8,6 +8,6 @@ export const EachTweet = ({ curTweetID, threadTweets, threadTweetsMutate }: { cu
     }
 
     return (
-        <TweetList tweets= {threadTweets} tweetsMutate={threadTweetsMutate}/>
+        <TweetList tweets= {threadTweets} allTweetsMutate={threadTweetsMutate} followingTweetsMutate={null}/>
     )
 }

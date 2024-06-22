@@ -7,6 +7,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Typography from '@mui/material/Typography';
 import { Dispatch, SetStateAction } from 'react';
 import { AccountCircle } from '@mui/icons-material';
+import { fireAuth } from '@/lib/auth/firebase';
+import { UserConfigurationModal } from './UserConfigurationModal';
+import { useModal } from './UserConfigurationModal/hooks';
 
 const drawerWidth = 240;
 
@@ -32,8 +35,10 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 export const Header = ({ isSidebarOpen, setIsSidebarOpen }: { isSidebarOpen: boolean, setIsSidebarOpen: Dispatch<SetStateAction<boolean>> }) => {
-    console.log("header", isSidebarOpen)
+    const { isOpenModal, setOpenModal } = useModal()
+
     return (
+        <>
             <AppBar position="fixed" open={isSidebarOpen}>
                 <Toolbar>
                     <IconButton
@@ -54,10 +59,14 @@ export const Header = ({ isSidebarOpen, setIsSidebarOpen }: { isSidebarOpen: boo
                         aria-controls="menu-appbar"
                         aria-haspopup="true"
                         color="inherit"
+                        onClick = {() => setOpenModal(true)}
                     >
                         <AccountCircle />
                     </IconButton>
+                    <button onClick={() => fireAuth.signOut()}>signOut</button>
                 </Toolbar>
             </AppBar>
+            <UserConfigurationModal isOpenModal={isOpenModal} handleClose={() => setOpenModal(false)}/>
+        </>
     )
 }

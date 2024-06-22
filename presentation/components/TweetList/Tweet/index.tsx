@@ -1,7 +1,7 @@
 import { useTweets } from "@/useCase/query/useTweets"
 import { useAuthToken } from "@/useCase/query/useAuthToken"
 import { useCreateFavorite } from "@/useCase/command/createFavorite"
-import { useDeleteFavorite } from "@/useCase/command/DeleteFavorite"
+import { useDeleteFavorite } from "@/useCase/command/deleteFavorite"
 import Link from 'next/link'
 import { useState } from "react"
 import React from 'react';
@@ -27,16 +27,17 @@ type EachTweetProps = {
     replyCount: number,
     tags: string[],
     isFaved: boolean,
-    tweetsMutate: KeyedMutator<TweetResponse[]> | null
+    allTweetsMutate: KeyedMutator<TweetResponse[]> | null
+    followingTweetsMutate: KeyedMutator<TweetResponse[]> | null
 }
 
 export const EachTweet = (props: EachTweetProps) => {
     const router = useRouter()
     const { isOpenModal, setOpenModal } = useModal()
-    const { data: token } = useAuthToken()
-    const { id, body, postedAt, postedByName, likeCount, replyCount, tags, isFaved, tweetsMutate } = props
+    // const { data: token } = useAuthToken()
+    const { id, body, postedAt, postedByName, likeCount, replyCount, tags, isFaved, allTweetsMutate, followingTweetsMutate } = props
     const [tweet, setTweet] = useState({ id, body, postedAt, postedByName, likeCount, tags, isFaved, replyCount })
-    const { data, trigger, error } = useTweets(token, tweet.id)
+    // const { data, trigger, error } = useTweets(token, tweet.id)
     const { createFavorite } = useCreateFavorite(tweet.id)
     const { deleteFavorite } = useDeleteFavorite(tweet.id)
 
@@ -47,25 +48,13 @@ export const EachTweet = (props: EachTweetProps) => {
         e.stopPropagation()
         if (!tweet.isFaved) {
             createFavorite()
-                .then(() => trigger())
+                .then(() => setTweet({...tweet, isFaved: !tweet.isFaved, likeCount: tweet.likeCount += 1}))
                 .catch((e) => console.log(e))
-                .then((data) => {
-                    if (!!data) {
-                        setTweet(data[0])
-                        console.log(data)
-                    }
-                })
         }
         else {
             deleteFavorite()
-                .then(() => trigger())
+            .then(() => setTweet({...tweet, isFaved: !tweet.isFaved, likeCount: tweet.likeCount -= 1}))
                 .catch((e) => console.log(e))
-                .then((data) => {
-                    if (!!data) {
-                        setTweet(data[0])
-                        console.log(data)
-                    }
-                })
         }
     }
     return (
@@ -106,7 +95,7 @@ export const EachTweet = (props: EachTweetProps) => {
                 </IconButton> */}
                 </CardActions>
             </Card>
-            <ReplyModal tweetID={tweet.id} isOpenModal={isOpenModal} handleClose={() => setOpenModal(false)} tweetsMutate={tweetsMutate} />
+            <ReplyModal tweetID={tweet.id} isOpenModal={isOpenModal} handleClose={() => setOpenModal(false)} allTweetsMutate={allTweetsMutate} followingTweetsMutate={followingTweetsMutate} />
         </>
     );
 }

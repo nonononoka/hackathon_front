@@ -20,9 +20,8 @@ export type FormType = {
     tweet: string;
 }
 
-export const ReplyModal = ({ tweetID, isOpenModal, handleClose, allTweetsMutate, followingTweetsMutate }: { tweetID: string, isOpenModal: boolean, handleClose: () => void , allTweetsMutate: KeyedMutator<TweetResponse[]> | null, followingTweetsMutate:  KeyedMutator<TweetResponse[]> | null}) => {
-    const { createReplyTweetTrigger } = useCreateReplyTweet(tweetID)
-    
+export const UserConfigurationModal = ({ isOpenModal, handleClose }: { isOpenModal: boolean, handleClose: () => void }) => {
+
     return (
         <Modal
             open={isOpenModal}
@@ -31,7 +30,9 @@ export const ReplyModal = ({ tweetID, isOpenModal, handleClose, allTweetsMutate,
             aria-describedby="modal-modal-description"
         >
             <Box sx={style}>
-                <TweetForm handleClose = {handleClose} createTweetTrigger={createReplyTweetTrigger} allTweetsMutate={allTweetsMutate} followingTweetsMutate={followingTweetsMutate}/>
+                <div>
+                    <p>設定</p>
+                </div>
             </Box>
         </Modal>
     )

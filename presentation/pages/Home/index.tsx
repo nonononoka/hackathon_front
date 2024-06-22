@@ -1,7 +1,6 @@
 import { useFollowingTweets } from "@/useCase/query/useFollowingTweets"
 import { useAuthToken } from "@/useCase/query/useAuthToken"
 import { useTaggedTweets } from "@/useCase/query/useTweets"
-import { TagForm } from "./parts/TweetForm/TagForm"
 import { useState } from "react"
 import { TweetForm } from "@/presentation/components/TweetForm"
 import { useCreateTweet } from "@/useCase/command/createTweet";
@@ -18,6 +17,7 @@ export type FormType = {
 export const Home = () => {
   // tweetを送ったりgetしたり
   const { data: token } = useAuthToken()
+  console.log(token)
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   let { data: followingTweets, mutate: followingTweetsMutate } = useFollowingTweets(token)
   let { data: allTweets, mutate: allTweetsMutate, isLoading } = useTaggedTweets(token, selectedTags)
@@ -25,25 +25,23 @@ export const Home = () => {
   allTweets = allTweets?.filter((tweet) => !tweet.replyTo.Valid)
   followingTweets = followingTweets?.filter((tweet) => !tweet.replyTo.Valid)
   allTweets?.sort((a, b) => {
-    // a と b の postedAt を比較して、降順に並べ替える
     if (a.postedAt > b.postedAt) {
-        return -1; // a の postedAt が b より大きい場合、a を b より前にする
+      return -1;
     } else if (a.postedAt < b.postedAt) {
-        return 1; // a の postedAt が b より小さい場合、a を b より後ろにする
+      return 1;
     } else {
-        return 0; // postedAt が同じ場合は順序を変えない
+      return 0;
     }
-});
+  });
   followingTweets?.sort((a, b) => {
-    // a と b の postedAt を比較して、降順に並べ替える
     if (a.postedAt > b.postedAt) {
-        return -1; // a の postedAt が b より大きい場合、a を b より前にする
+      return -1;
     } else if (a.postedAt < b.postedAt) {
-        return 1; // a の postedAt が b より小さい場合、a を b より後ろにする
+      return 1;
     } else {
-        return 0; // postedAt が同じ場合は順序を変えない
+      return 0;
     }
-});
+  });
 
   if (isLoading || !allTweets) {
     return <div>Loading</div>
@@ -51,9 +49,9 @@ export const Home = () => {
 
   return (
     <Box sx={{ width: `calc(100vw - ${drawerWidth})`, bgcolor: 'background.paper' }}>
-      <TweetForm createTweetTrigger={createTweetTrigger} tweetsMutate={allTweetsMutate} handleClose = {null}/>
-      <TagForm setSelectedTags={setSelectedTags} />
-      <HomeTweets allTweets={allTweets} followingTweets={followingTweets} allTweetsMutate = {allTweetsMutate} followingTweetsMutate= {followingTweetsMutate}/>
+      <TweetForm createTweetTrigger={createTweetTrigger} allTweetsMutate={allTweetsMutate} followingTweetsMutate={followingTweetsMutate} handleClose={null} />
+      {/* <TagForm setSelectedTags={setSelectedTags} /> */}
+      <HomeTweets allTweets={allTweets} followingTweets={followingTweets} allTweetsMutate={allTweetsMutate} followingTweetsMutate={followingTweetsMutate} />
     </Box>
 
   );

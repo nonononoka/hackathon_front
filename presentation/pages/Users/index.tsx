@@ -5,9 +5,11 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import { useState } from 'react';
-import { TweetList } from '@/presentation/components/TweetList';
-import { TweetResponse } from '@/types/apiTweet';
-import { KeyedMutator } from 'swr';
+import { useUsers } from '@/useCase/query/useUsers';
+import { useFollowingUsers } from '@/useCase/query/useFollowingUsers';
+import { useFollowedUsers } from '@/useCase/query/useFollowedUsers';
+import { useAuthToken } from '@/useCase/query/useAuthToken';
+import { UserList } from '@/presentation/components/UserList';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -43,15 +45,12 @@ function a11yProps(index: number) {
     };
 }
 
-type HomeTweetsProps = {
-    allTweets: TweetResponse[] | undefined,
-    followingTweets : TweetResponse[] | undefined,
-    allTweetsMutate: KeyedMutator<TweetResponse[]>,
-    followingTweetsMutate: KeyedMutator<TweetResponse[]>
-}
-
-export const HomeTweets = ({ allTweets, followingTweets, allTweetsMutate, followingTweetsMutate }: HomeTweetsProps) => {
+export const Users = () => {
     const theme = useTheme();
+    const { data: token } = useAuthToken()
+    const { data: allUsers, mutate: allUsersMutate } = useUsers(token)
+    const { data: followingUsers, mutate: followingUsersMutate } = useFollowingUsers(token)
+    const { data: followedUsers} = useFollowedUsers(token)
     const [value, setValue] = useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -69,15 +68,19 @@ export const HomeTweets = ({ allTweets, followingTweets, allTweetsMutate, follow
                     variant="fullWidth"
                     aria-label="full width tabs example"
                 >
-                    <Tab label="All Tweets" {...a11yProps(0)} />
-                    <Tab label="Following Tweets" {...a11yProps(1)} />
+                    <Tab label="All Users" {...a11yProps(0)} />
+                    <Tab label="Following" {...a11yProps(1)} />
+                    <Tab label="Followers" {...a11yProps(2)} />
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0} dir={theme.direction}>
-                <TweetList tweets={allTweets} allTweetsMutate={allTweetsMutate} followingTweetsMutate = {followingTweetsMutate} />
+                <UserList users={allUsers} allUsersMutate = {allUsersMutate} followingUsersMutate={followingUsersMutate} />
             </TabPanel>
             <TabPanel value={value} index={1} dir={theme.direction}>
-                <TweetList tweets={followingTweets} allTweetsMutate={allTweetsMutate} followingTweetsMutate = {followingTweetsMutate}/>
+                <UserList users={followingUsers} allUsersMutate = {allUsersMutate} followingUsersMutate={followingUsersMutate} />
+            </TabPanel>
+            <TabPanel value={value} index={2} dir={theme.direction}>
+                <UserList users={followedUsers} allUsersMutate = {allUsersMutate} followingUsersMutate={followingUsersMutate} />
             </TabPanel>
         </>
     )

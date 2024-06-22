@@ -1,6 +1,6 @@
 import { useUsers } from "@/useCase/query/useUsers"
 import { useAuthToken } from "@/useCase/query/useAuthToken"
-import { useFollowFriend } from "@/useCase/command/followFriend"
+// import { useFollowUser } from "@/useCase/command/followUser"
 import { AllUsers } from "./AllUsers"
 import { FollowingUsers } from "./FollowingUsers"
 import { UserResponse } from "@/types/apiUser"

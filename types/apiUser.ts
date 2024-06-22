@@ -5,7 +5,10 @@ export type UserResponse = {
   id: string;
   name: string;
   email: string;
-
+  // このユーザーをフォローしてるか
+  isFollowing: boolean;
+  // このユーザーにフォローされてるか
+  isFollowed: boolean;
 };
 
 /**

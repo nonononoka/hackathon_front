@@ -80,7 +80,13 @@ export const EachTweet = (props: EachTweetProps) => {
         <>
             <Card variant="outlined" onClick={() => router.push(`/tweet/${tweet.id}`)}>
                 <CardHeader
-                    avatar={<Avatar src={tweet.postedByImage.String} alt={tweet.postedByName} onClick={(e: React.MouseEvent) => { e.stopPropagation(); router.push(`/users/${tweet.postedBy}`) }} />}
+                    avatar={<Avatar sx={{
+                        transition: 'transform 0.3s ease-in-out', // トランジションの設定
+                        '&:hover': {
+                            transform: 'scale(1.1)', // ホバー時の拡大
+                            cursor: 'pointer', // ホバー時のカーソル形状の指定
+                        },
+                    }} src={tweet.postedByImage.String} alt={tweet.postedByName} onClick={(e: React.MouseEvent) => { e.stopPropagation(); router.push(`/users/${tweet.postedBy}`) }} />}
                     title={tweet.postedByName}
                     subheader={`@${tweet.postedByName} • ${tweet.postedAt}`}
                 />

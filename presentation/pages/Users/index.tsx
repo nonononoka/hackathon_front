@@ -6,8 +6,7 @@ import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import { useState } from 'react';
 import { useUsers } from '@/useCase/query/useUsers';
-import { useFollowingUsers } from '@/useCase/query/useFollowingUsers';
-import { useFollowedUsers } from '@/useCase/query/useFollowedUsers';
+import { useMeFollowedUsers, useMeFollowingUsers } from '@/useCase/query/userelationship';
 import { useAuthToken } from '@/useCase/query/useAuthToken';
 import { UserList } from '@/presentation/components/UserList';
 
@@ -48,8 +47,8 @@ export const Users = () => {
     const theme = useTheme();
     const { data: token } = useAuthToken()
     const { data: allUsers, mutate: allUsersMutate } = useUsers(token)
-    const { data: followingUsers, mutate: followingUsersMutate } = useFollowingUsers(token)
-    const { data: followedUsers, mutate: followedUsersMutate } = useFollowedUsers(token)
+    const { data: followingUsers, mutate: followingUsersMutate } = useMeFollowingUsers(token)
+    const { data: followedUsers, mutate: followedUsersMutate } = useMeFollowedUsers(token)
     const [value, setValue] = useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {

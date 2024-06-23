@@ -17,7 +17,6 @@ export const Home = () => {
   // tweetを送ったりgetしたり
   const { data: token } = useAuthToken()
   let { allTweets: { tweets: allTweets, mutate: allTweetsMutate }, followingTweets: { tweets: followingTweets, mutate: followingTweetsMutate } } = useTweetContext()
-  console.log(token)
   const { createTweetTrigger } = useCreateTweet()
   allTweets = allTweets?.filter((tweet) => !tweet.replyTo.Valid)
   followingTweets = followingTweets?.filter((tweet) => !tweet.replyTo.Valid)

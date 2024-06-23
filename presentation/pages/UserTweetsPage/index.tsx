@@ -1,12 +1,13 @@
 import { useUserTweets } from "@/useCase/query/useTweets"
 import { useAuthToken } from "@/useCase/query/useAuthToken"
 import { TweetList } from "@/presentation/components/TweetList"
+import { Loading } from "@/presentation/components/Loading"
 
 export const UserTweetsPage = ({ userID }: { userID: string }) => {
     const { data: token } = useAuthToken()
     const { data, isLoading, mutate, error } = useUserTweets(token, userID)
     if (isLoading) {
-        return <p>isLoading...</p>
+        return <Loading />
     }
 
     data?.sort((a, b) => {

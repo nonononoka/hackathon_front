@@ -1,5 +1,6 @@
 import { useRouter } from 'next/navigation'
 import { FC, useEffect } from 'react'
+import { Loading } from '@/presentation/components/Loading'
 
 const RootPage: FC = () => {
   const router = useRouter()
@@ -8,7 +9,7 @@ const RootPage: FC = () => {
     router.push('home')
   }, [router])
 
-  return <p>Loading...</p>
+  return <Loading />
 }
 
 export default RootPage

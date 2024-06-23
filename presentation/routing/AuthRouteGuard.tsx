@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import { FC, ReactNode } from 'react'
+import { Loading } from '../components/Loading'
 
 import { useAuth } from '@/useCase/query/useAuth'
 
@@ -11,7 +12,7 @@ const AuthRouteGuardComponent: FC<{
   const { loading, error } = useAuth()
 
   if (loading) {
-    return <p>Loading...</p>
+    return <Loading />
   }
 
   if (error) {

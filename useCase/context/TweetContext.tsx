@@ -4,6 +4,7 @@ import { useTaggedTweets } from '../query/useTweets';
 import { useFollowingTweets } from '../query/useFollowingTweets';
 import { useAuthToken } from '../query/useAuthToken';
 import { KeyedMutator } from 'swr';
+import { Loading } from '@/presentation/components/Loading';
 
 interface TweetContextType {
     allTweets: {
@@ -40,7 +41,7 @@ export const TweetContextProvider: FC<{
     const { data: followingTweets, isLoading: followingTweetsLoading, error: followingTweetsError, mutate: followingTweetsMutate } = useFollowingTweets(token)
 
     if (allTweetsLoading || allTweetsError || !allTweets || followingTweetsLoading || followingTweetsError || !followingTweets) {
-        return <p>isLoading,,,</p>
+        return <Loading />
     }
 
     return (<TweetContext.Provider value={{ allTweets: { tweets: allTweets, mutate: allTweetsMutate }, followingTweets: { tweets: followingTweets, mutate: followingTweetsMutate } }}>{children}</TweetContext.Provider>);

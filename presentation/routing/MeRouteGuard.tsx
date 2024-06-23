@@ -8,6 +8,7 @@ import AuthRouteGuard from './AuthRouteGuard';
 import { useAuthToken } from '@/useCase/query/useAuthToken';
 import { KeyedMutator } from 'swr';
 import { UserResponse } from '@/types/apiUser';
+import { Loading } from '../components/Loading';
 
 export type MeContextType = {
     email: string | null,
@@ -65,7 +66,7 @@ const MeRouteGuardComponent: FC<{
     }, [data, error, isLoading, createMeLoading])
 
     if (!data) {
-        return <p>Loading...</p>;
+        return <Loading />;
     }
 
     return <MeContext.Provider value = {{id: data?.id, name:data?.name, email:data?.email, token: token, bio: data?.bio.String, image: data?.image.String, mutate: mutate}}>{children}</MeContext.Provider>;

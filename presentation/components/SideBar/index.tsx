@@ -5,13 +5,14 @@ import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import HomeIcon from '@mui/icons-material/Home';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
+import SearchIcon from '@mui/icons-material/Search';
 import { Dispatch, SetStateAction } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -55,24 +56,13 @@ export default function Sidebar({ isSidebarOpen, setIsSidebarOpen }: { isSidebar
             </DrawerHeader>
             <Divider />
             <List>
-                {['home', 'users', 'search', 'Drafts'].map((text, index) => (
+                {['home', 'users', 'search'].map((text, index) => (
                     <ListItem key={text} disablePadding>
                         <ListItemButton onClick = {() => router.push(`/${text}`)}>
                             <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </List>
-            <Divider />
-            <List>
-                {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                    <ListItem key={text} disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                                {index === 0 && <HomeIcon /> }
+                                {index === 1 && <SupervisedUserCircleIcon /> }
+                                {index === 2 && <SearchIcon /> }
                             </ListItemIcon>
                             <ListItemText primary={text} />
                         </ListItemButton>

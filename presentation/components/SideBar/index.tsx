@@ -15,6 +15,7 @@ import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import SearchIcon from '@mui/icons-material/Search';
 import { Dispatch, SetStateAction } from 'react';
 import { useRouter } from 'next/navigation';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 
 export const drawerWidth = 240;
 
@@ -56,13 +57,14 @@ export default function Sidebar({ isSidebarOpen, setIsSidebarOpen }: { isSidebar
             </DrawerHeader>
             <Divider />
             <List>
-                {['home', 'users', 'search'].map((text, index) => (
+                {['home', 'users', 'search', 'question'].map((text, index) => (
                     <ListItem key={text} disablePadding>
                         <ListItemButton onClick = {() => router.push(`/${text}`)}>
                             <ListItemIcon>
                                 {index === 0 && <HomeIcon /> }
                                 {index === 1 && <SupervisedUserCircleIcon /> }
                                 {index === 2 && <SearchIcon /> }
+                                {index === 3 && <QuestionAnswerIcon /> }
                             </ListItemIcon>
                             <ListItemText primary={text} />
                         </ListItemButton>

@@ -8,11 +8,11 @@ export const UserTweetsPage = ({ userID }: { userID: string }) => {
     const { data: token } = useAuthToken()
     // const { data: followedUsers, mutate: followedUsersMutate } = useFollowedUsers(token, userID)
     // const { data: followingUsers, mutate: followingUsersMutate } = useFollowedUsers(token, userID)
-    const { data, isLoading, mutate, error } = useUserTweets(token, userID)
+    let { data, isLoading, mutate, error } = useUserTweets(token, userID)
     if (isLoading) {
         return <Loading />
     }
-
+    data = data?.filter((tweet) => !tweet.replyTo.Valid)
     data?.sort((a, b) => {
         // a と b の postedAt を比較して、降順に並べ替える
         if (a.postedAt < b.postedAt) {

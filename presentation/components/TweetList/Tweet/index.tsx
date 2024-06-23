@@ -47,7 +47,7 @@ export const EachTweet = (props: EachTweetProps) => {
     useEffect(() => {
         setTweet({ id, body, postedAt, postedBy, postedByName, postedByImage, likeCount, tags, isFaved, replyCount, replyTo })
     }, [id, body, postedAt, postedBy, postedByName, postedByImage, likeCount, tags, isFaved, replyCount])
-    console.log(tweet.postedByImage)
+
     const handleFav = (e: React.MouseEvent) => {
         e.stopPropagation()
         if (!tweet.isFaved) {
@@ -83,8 +83,8 @@ export const EachTweet = (props: EachTweetProps) => {
     return (
         <>
             <Card sx={{
-                border: tweet.replyTo.Valid? 'none' : '2px solid #e0e0e0',
-                borderBottom: tweet.replyTo.Valid ? '2px solid #e0e0e0' : undefined,
+                border: 'none' ,
+                borderBottom: '2px solid #e0e0e0',
                 marginRight: tweet.replyTo.Valid ? 'auto': undefined, // 右側に寄せる
                 marginLeft: tweet.replyTo.Valid ? 16: undefined,
                 transition: 'background-color 0.3s ease', // 背景色のトランジション設定

@@ -42,8 +42,6 @@ export const UserConfigurationModal = ({ isOpenModal, handleClose }: { isOpenMod
         setBio(event.target.value);
     };
 
-    console.log(imageSource)
-
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault()
         putMe({ data: { name: name, bio: bio, image: imageSource } })

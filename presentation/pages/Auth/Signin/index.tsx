@@ -21,7 +21,6 @@ export const SignInPage = () => {
     signInWithPopup(fireAuth, provider)
       .then(res => {
         const user = res.user;
-        console.log("ログインユーザー: " + user.displayName);
         router.push('/home')
       })
       .catch(err => {

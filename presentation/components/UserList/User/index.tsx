@@ -20,7 +20,6 @@ type UserProps = {
 }
 
 export const EachUser = (props: UserProps) => {
-    console.log(props)
     const { id, email, name, image, isFollowing, bio, isFollowed, followingUsersMutate, allUsersMutate, followedUsersMutate } = props
     const [user, setUser] = useState({ id, email, bio, name, image, isFollowing, isFollowed })
     const { followUser } = useFollowUser(id)

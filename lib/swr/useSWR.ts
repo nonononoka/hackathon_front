@@ -55,7 +55,6 @@ export const usePOSTMutation = <Result, Error = ErrorResponse, Data = object>(
     url: string, // これはuseSWRMutationのurlがくる。
     { arg }: { arg: { data?: Data } | undefined },
   ) => {
-    console.log(url) // mee
     const idToken = await fireAuth.currentUser?.getIdToken()
     return axios
       .post<Result>(`${process.env.NEXT_PUBLIC_BACKEND_URL}${url}`, arg?.data, {
@@ -112,7 +111,6 @@ export const useDELETEMutation = <
     url: string,
     { arg }: { arg: { data?: Params } | undefined },
   ) => {
-    console.log(url)
     const idToken = await fireAuth.currentUser?.getIdToken()
     return axios
       .delete<Result>(`${process.env.NEXT_PUBLIC_BACKEND_URL}${url}`, {

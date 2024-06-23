@@ -3,7 +3,6 @@ import useSWR from "swr";
 
 const getAuthToken = async () => {
     const token = await fireAuth.currentUser?.getIdToken();
-    // console.log(token)
     return token;
 };
 

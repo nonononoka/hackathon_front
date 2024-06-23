@@ -2,9 +2,12 @@ import { useUserTweets } from "@/useCase/query/useTweets"
 import { useAuthToken } from "@/useCase/query/useAuthToken"
 import { TweetList } from "@/presentation/components/TweetList"
 import { Loading } from "@/presentation/components/Loading"
+import { useFollowedUsers, useFollowingUsers } from "@/useCase/query/useRelationship"
 
 export const UserTweetsPage = ({ userID }: { userID: string }) => {
     const { data: token } = useAuthToken()
+    // const { data: followedUsers, mutate: followedUsersMutate } = useFollowedUsers(token, userID)
+    // const { data: followingUsers, mutate: followingUsersMutate } = useFollowedUsers(token, userID)
     const { data, isLoading, mutate, error } = useUserTweets(token, userID)
     if (isLoading) {
         return <Loading />

@@ -7,7 +7,7 @@ import React from 'react';
 import { Avatar, Card, CardHeader, CardContent, CardActions, IconButton, Typography, Divider, Chip } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import RepeatIcon from '@mui/icons-material/Repeat';
-import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import ReplyIcon from '@mui/icons-material/Reply';
 import ShareIcon from '@mui/icons-material/Share';
 import { ReplyModal } from "../ReplyModal"
 import { useModal } from "../ReplyModal/hooks"
@@ -29,19 +29,23 @@ type EachTweetProps = {
     tags: string[],
     isFaved: boolean,
     otherMutates?: KeyedMutator<TweetResponse[]>[]
+    replyTo: {
+        String: string;
+        Valid: boolean;
+    };
 }
 
 export const EachTweet = (props: EachTweetProps) => {
     const router = useRouter()
     const { isOpenModal, setOpenModal } = useModal()
-    const { id, body, postedAt, postedBy, postedByName, postedByImage, likeCount, replyCount, tags, isFaved, otherMutates } = props
-    const [tweet, setTweet] = useState({ id, body, postedAt, postedBy, postedByName, postedByImage, likeCount, tags, isFaved, replyCount })
+    const { id, body, postedAt, postedBy, postedByName, postedByImage, likeCount, replyCount, tags, isFaved, otherMutates, replyTo } = props
+    const [tweet, setTweet] = useState({ id, body, postedAt, postedBy, postedByName, postedByImage, likeCount, tags, isFaved, replyCount, replyTo })
     const { createFavorite } = useCreateFavorite(tweet.id)
     const { deleteFavorite } = useDeleteFavorite(tweet.id)
     let { allTweets: { mutate: allTweetsMutate }, followingTweets: { mutate: followingTweetsMutate } } = useTweetContext()
 
     useEffect(() => {
-        setTweet({ id, body, postedAt, postedBy, postedByName, postedByImage, likeCount, tags, isFaved, replyCount })
+        setTweet({ id, body, postedAt, postedBy, postedByName, postedByImage, likeCount, tags, isFaved, replyCount, replyTo })
     }, [id, body, postedAt, postedBy, postedByName, postedByImage, likeCount, tags, isFaved, replyCount])
     console.log(tweet.postedByImage)
     const handleFav = (e: React.MouseEvent) => {
@@ -78,7 +82,17 @@ export const EachTweet = (props: EachTweetProps) => {
     }
     return (
         <>
-            <Card variant="outlined" onClick={() => router.push(`/tweet/${tweet.id}`)}>
+            <Card sx={{
+                border: tweet.replyTo.Valid? 'none' : '2px solid #e0e0e0',
+                borderBottom: tweet.replyTo.Valid ? '2px solid #e0e0e0' : undefined,
+                marginRight: tweet.replyTo.Valid ? 'auto': undefined, // 右側に寄せる
+                marginLeft: tweet.replyTo.Valid ? 16: undefined,
+                transition: 'background-color 0.3s ease', // 背景色のトランジション設定
+                '&:hover': {
+                    cursor: 'pointer', // ホバー時のカーソル形状の指定
+                    backgroundColor: '#f0f0f0', // ホバー時の背景色
+                },
+            }} variant="outlined" onClick={() => router.push(`/tweet/${tweet.id}`)}>
                 <CardHeader
                     avatar={<Avatar sx={{
                         transition: 'transform 0.3s ease-in-out', // トランジションの設定
@@ -114,19 +128,9 @@ export const EachTweet = (props: EachTweetProps) => {
                         e.stopPropagation()
                         setOpenModal(true)
                     }}>
-                        <ChatBubbleOutlineIcon />
+                        <ReplyIcon />
                         <Typography variant="body2">{tweet.replyCount}</Typography>
                     </IconButton>
-                    {/* <IconButton aria-label="retweet">
-                    <RepeatIcon />
-                    <Typography variant="body2">{retweets}</Typography>
-                </IconButton>
-                <IconButton aria-label="comment">
-                    <ChatBubbleOutlineIcon />
-                </IconButton>
-                <IconButton aria-label="share">
-                    <ShareIcon />
-                </IconButton> */}
                 </CardActions>
             </Card>
             <ReplyModal tweetID={tweet.id} isOpenModal={isOpenModal} handleClose={() => setOpenModal(false)} otherMutates={otherMutates} />

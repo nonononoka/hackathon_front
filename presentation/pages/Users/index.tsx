@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import { useState } from 'react';
 import { useUsers } from '@/useCase/query/useUsers';
-import { useMeFollowedUsers, useMeFollowingUsers } from '@/useCase/query/userelationship';
+import { useMeFollowedUsers, useMeFollowingUsers } from '@/useCase/query/useRelationship';
 import { useAuthToken } from '@/useCase/query/useAuthToken';
 import { UserList } from '@/presentation/components/UserList';
 

@@ -21,7 +21,7 @@ export const TweetForm: React.FC<TweetFormProps> = (props: TweetFormProps) => {
     const { createTweetTrigger, otherMutates, handleClose } = props;
     const { allTweets: { mutate: allTweetsMutate }, followingTweets: { mutate: followingTweetsMutate } } = useTweetContext()
     const [tweetText, setTweetText] = useState('');
-    const [tags, setTags] = useState<string[]>([]); // 入力されたタグのリスト
+    const [tags, setTags] = useState<string[]>([]);
 
     const handleChange = (tags: string[]) => {
         setTags(tags);
@@ -65,7 +65,7 @@ export const TweetForm: React.FC<TweetFormProps> = (props: TweetFormProps) => {
         >
             <TextField
                 style={{ marginBottom: '16px' }}
-                placeholder="What's happening?"
+                placeholder="Anything to share?"
                 multiline
                 rows={3}
                 variant="outlined"

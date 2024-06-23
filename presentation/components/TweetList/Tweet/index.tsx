@@ -1,14 +1,12 @@
-import { useTweets } from "@/useCase/query/useTweets"
-import { useAuthToken } from "@/useCase/query/useAuthToken"
 import { useCreateFavorite } from "@/useCase/command/createFavorite"
 import { useDeleteFavorite } from "@/useCase/command/deleteFavorite"
 import { useState } from "react"
 import React from 'react';
 import { Avatar, Card, CardHeader, CardContent, CardActions, IconButton, Typography, Divider, Chip } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import RepeatIcon from '@mui/icons-material/Repeat';
 import ReplyIcon from '@mui/icons-material/Reply';
-import ShareIcon from '@mui/icons-material/Share';
+import Markdown from 'react-markdown'
+import SyntaxHighlighter from 'react-syntax-highlighter';
 import { ReplyModal } from "../ReplyModal"
 import { useModal } from "../ReplyModal/hooks"
 import { useRouter } from "next/navigation"
@@ -16,6 +14,8 @@ import { KeyedMutator } from "swr";
 import { TweetResponse } from "@/types/apiTweet";
 import { useEffect } from "react"
 import { useTweetContext } from "@/useCase/context/TweetContext"
+import type { ClassAttributes, HTMLAttributes } from 'react'
+import type { ExtraProps } from 'react-markdown'
 
 type EachTweetProps = {
     id: string,
@@ -36,6 +36,29 @@ type EachTweetProps = {
 }
 
 export const EachTweet = (props: EachTweetProps) => {
+    const Pre = ({
+        children,
+        ...props
+    }: ClassAttributes<HTMLPreElement> &
+        HTMLAttributes<HTMLPreElement> &
+        ExtraProps) => {
+        if (!children || typeof children !== 'object') {
+            return <code {...props}>{children}</code>
+        }
+        const childType = 'type' in children ? children.type : ''
+        if (childType !== 'code') {
+            return <code {...props}>{children}</code>
+        }
+
+        const childProps = 'props' in children ? children.props : {}
+        const { children: code } = childProps
+
+        return (
+            <SyntaxHighlighter>{String(code).replace(/\n$/, '')}</SyntaxHighlighter>
+        )
+    }
+
+
     const router = useRouter()
     const { isOpenModal, setOpenModal } = useModal()
     const { id, body, postedAt, postedBy, postedByName, postedByImage, likeCount, replyCount, tags, isFaved, otherMutates, replyTo } = props
@@ -83,10 +106,10 @@ export const EachTweet = (props: EachTweetProps) => {
     return (
         <>
             <Card sx={{
-                border: 'none' ,
+                border: 'none',
                 borderBottom: '2px solid #e0e0e0',
-                marginRight: tweet.replyTo.Valid ? 'auto': undefined, // 右側に寄せる
-                marginLeft: tweet.replyTo.Valid ? 16: undefined,
+                marginRight: tweet.replyTo.Valid ? 'auto' : undefined, // 右側に寄せる
+                marginLeft: tweet.replyTo.Valid ? 16 : undefined,
                 transition: 'background-color 0.3s ease', // 背景色のトランジション設定
                 '&:hover': {
                     cursor: 'pointer', // ホバー時のカーソル形状の指定
@@ -106,7 +129,9 @@ export const EachTweet = (props: EachTweetProps) => {
                 />
                 <CardContent>
                     <Typography variant="body1" gutterBottom>
-                        {tweet.body}
+                        <Markdown components={{
+                            pre: Pre,
+                        }}>{tweet.body}</Markdown>
                     </Typography>
                 </CardContent>
                 {tweet.tags && (

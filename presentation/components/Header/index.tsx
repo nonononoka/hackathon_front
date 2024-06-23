@@ -4,6 +4,7 @@ import { styled } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import LogoutIcon from '@mui/icons-material/Logout';
 import Typography from '@mui/material/Typography';
 import { Dispatch, SetStateAction } from 'react';
 import { AccountCircle } from '@mui/icons-material';
@@ -40,33 +41,46 @@ export const Header = ({ isSidebarOpen, setIsSidebarOpen }: { isSidebarOpen: boo
     return (
         <>
             <AppBar position="fixed" open={isSidebarOpen}>
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={() => setIsSidebarOpen(true)}
-                        edge="start"
-                        sx={{ mr: 2, ...(isSidebarOpen && { display: 'none' }) }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" noWrap component="div">
-                        Tech Tweet
-                    </Typography>
-                    <IconButton
-                        size="large"
-                        aria-label="account of current user"
-                        aria-controls="menu-appbar"
-                        aria-haspopup="true"
-                        color="inherit"
-                        onClick = {() => setOpenModal(true)}
-                    >
-                        <AccountCircle />
-                    </IconButton>
-                    <button onClick={() => fireAuth.signOut()}>signOut</button>
+                <Toolbar sx={{ justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={() => setIsSidebarOpen(true)}
+                            edge="start"
+                            sx={{ mr: 2, ...(isSidebarOpen && { display: 'none' }) }}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography variant="h6" noWrap component="div">
+                            Tech Tweet
+                        </Typography>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <IconButton
+                            size="large"
+                            aria-label="account of current user"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            color="inherit"
+                            onClick={() => setOpenModal(true)}
+                        >
+                            <AccountCircle />
+                        </IconButton>
+                        <IconButton
+                            size="large"
+                            aria-label="logout"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            color="inherit"
+                            onClick={() => fireAuth.signOut()}
+                        >
+                            <LogoutIcon />
+                        </IconButton>
+                    </div>
                 </Toolbar>
             </AppBar>
-            <UserConfigurationModal isOpenModal={isOpenModal} handleClose={() => setOpenModal(false)}/>
+            <UserConfigurationModal isOpenModal={isOpenModal} handleClose={() => setOpenModal(false)} />
         </>
     )
 }
